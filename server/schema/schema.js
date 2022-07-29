@@ -8,10 +8,10 @@ const InterviewType = new GraphQLObjectType({
     name: 'Interview',
     fields: () => ({
         id: { type: GraphQLID },
-        InterviewDate: { type: GraphQLString },
-        notes: { type: GraphQLString },
-        interviewer: { type: GraphQLString },
-        status: { type: GraphQLString },
+        InterviewDate: { type: GraphQLString, },
+        notes: { type: GraphQLString, },
+        interviewer: { type: GraphQLString, },
+        status: { type: GraphQLString, },
         // RELATIONSHIP WITH JOB DB
         job: {
             type: GraphQLString,
@@ -26,8 +26,9 @@ const InterviewType = new GraphQLObjectType({
 const JobType = new GraphQLObjectType({
     name: 'Job',
     fields: () => ({
+        id: { type: GraphQLID },
         company: { type: GraphQLString, },
-        logo: { type: GraphQLString },
+        logo: { type: GraphQLString, },
         jobTitle: { type: GraphQLString, },
         jobDesc: { type: GraphQLString, },
         status: { type: GraphQLString, },
@@ -77,3 +78,115 @@ const RootQuery = new GraphQLObjectType({
 })
 
 // MUTATIONS
+const mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+
+
+        // * ADD JOB
+
+
+        addJob: {
+            type: JobType,
+            args: {
+                company: { type: GraphQLString, },
+                logo: { type: GraphQLString, },
+                jobTitle: { type: GraphQLString, },
+                jobDesc: { type: GraphQLString, },
+                status: {
+                    type: new GraphQLEnumType({
+                        name: 'JobStatus',
+                        values: {
+                            'interviewing': { value: 'Not great' },
+                            'confirmation': { value: 'Fine' },
+                            'ignored': { value: 'Very good' },
+                            'completed': { value: 'Not Selected' }
+                        }
+                    }),
+                },
+                interviewId: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                const job = new Job({
+                    company: args.company,
+                    logo: args.logo,
+                    jobTitle: args.jobTitle,
+                    jobDesc: args.jobDesc,
+                    status: args.status,
+                    interview: args.interviewId
+                });
+                return job.save()
+            }
+        },
+
+
+        // ! DELETE JOB
+
+
+        deleteJob: {
+            type: JobType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                // DELETE INTERVIEW LINKED TO THIS JOB
+                Interview.find({ interviewId: args.id }).then((jobs) => {
+                    jobs.forEach(project => {
+                        project.remove()
+                    })
+                })
+                // FINALLY DELETE JOB
+                return Job.findByIdAndRemove(args.id)
+            }
+        },
+
+
+        // * ADD INTERVIEW
+
+
+        addInterview: {
+            type: InterviewType,
+            args: {
+                InterviewDate: { type: GraphQLString, },
+                notes: { type: GraphQLString, },
+                interviewer: { type: GraphQLString, },
+                status: {
+                    type: new GraphQLEnumType({
+                        name: 'JobStatus',
+                        values: {
+                            'bad': { value: 'Not great' },
+                            'ok': { value: 'Fine' },
+                            'good': { value: 'Very good' },
+                            'excellent': { value: 'Excellent' },
+                            'superp': { value: 'Amazing' }
+                        }
+                    }),
+                },
+                jobId: { type: GraphQLNonNull(GraphQLID) }
+            }
+        },
+
+
+        // ! DELETE INTERVIEW
+
+
+        deleteInterview: {
+            type: InterviewType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {                
+                return Interview.findByIdAndDelete(args.id)
+            }            
+        },
+
+        // ? UPDATE JOB
+        // ? UPDATE INTERVIEW
+    }
+})
+
+
+// EXPORTS
+module.exports = new GraphQLSchema({
+    query: RootQuery
+})
