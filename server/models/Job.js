@@ -15,7 +15,7 @@ const JobSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Interviewing', 'Confirmation', 'Ignored']
+        enum: ['Having an interview', 'Email confirmation', 'Completely Ghosted']
     },
     interviewId: {
         type: mongoose.Schema.Types.ObjectId,

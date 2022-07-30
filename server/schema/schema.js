@@ -47,6 +47,12 @@ const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
         // JOB & JOBS
+        jobs: {
+            type: new GraphQLList(JobType),
+            resolve(parent, args) {
+                return Job.find(args.id)
+            }
+        },
         job: {
             type: JobType,
             args: { id: { type: GraphQLID } },
@@ -54,13 +60,13 @@ const RootQuery = new GraphQLObjectType({
                 return Job.findById(args.id)
             }
         },
-        jobs: {
-            type: new GraphQLList(JobType),
+        // INTERVIEW & INTERVIEWS
+        interviews: {
+            type: new GraphQLList(InterviewType),
             resolve(parent, args) {
-                return Job.findById(args.id)
+                return Interview.find(args.id)
             }
         },
-        // INTERVIEW & INTERVIEWS
         interview: {
             type: InterviewType,
             args: { id: { type: GraphQLID } },
@@ -68,12 +74,6 @@ const RootQuery = new GraphQLObjectType({
                 return Interview.findById(args.id)
             }
         },
-        interviews: {
-            type: new GraphQLList(InterviewType),
-            resolve(parent, args) {
-                return Interview.findById(args.id)
-            }
-        }
     }
 })
 
@@ -97,14 +97,13 @@ const mutation = new GraphQLObjectType({
                     type: new GraphQLEnumType({
                         name: 'JobStatus',
                         values: {
-                            'interviewing': { value: 'Not great' },
-                            'confirmation': { value: 'Fine' },
-                            'ignored': { value: 'Very good' },
-                            'completed': { value: 'Not Selected' }
+                            'Interviewing': { value: 'Having an interview' },
+                            'Confirmation': { value: 'Email confirmation' },
+                            'Ignored': { value: 'Completely Ghosted' },
                         }
                     }),
                 },
-                interviewId: { type: GraphQLNonNull(GraphQLID) }
+                interviewId: { type: GraphQLID }
             },
             resolve(parent, args) {
                 const job = new Job({
@@ -113,7 +112,7 @@ const mutation = new GraphQLObjectType({
                     jobTitle: args.jobTitle,
                     jobDesc: args.jobDesc,
                     status: args.status,
-                    interview: args.interviewId
+                    interviewId: args.interviewId
                 });
                 return job.save()
             }
@@ -152,7 +151,7 @@ const mutation = new GraphQLObjectType({
                 interviewer: { type: GraphQLString, },
                 status: {
                     type: new GraphQLEnumType({
-                        name: 'JobStatus',
+                        name: 'InterviewStatus',
                         values: {
                             'bad': { value: 'Not great' },
                             'ok': { value: 'Fine' },
@@ -175,9 +174,9 @@ const mutation = new GraphQLObjectType({
             args: {
                 id: { type: GraphQLNonNull(GraphQLID) }
             },
-            resolve(parent, args) {                
+            resolve(parent, args) {
                 return Interview.findByIdAndDelete(args.id)
-            }            
+            }
         },
 
         // ? UPDATE JOB
@@ -188,5 +187,6 @@ const mutation = new GraphQLObjectType({
 
 // EXPORTS
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation
 })
