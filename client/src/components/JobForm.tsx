@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { ADD_JOB } from '../mutations/JobMutation';
 import { GET_JOBS } from '../queries/jobQueries';
+import InterviewForm from './InterviewForm';
 
 type Props = {};
 
@@ -13,19 +14,8 @@ const JobForm = (props: Props) => {
     const [status, setStatus] = useState('Ignored');
     const [interviewId, setInterviewId] = useState('No Interviews');
 
-    // const [addJob]: any = useMutation(ADD_JOB, {
-    //     variables: { company, logo, jobTitle, jobDesc, status, interviewId },
-    //     update(cache, { data: { addJob } }) {
-    //         const { jobs }: any = cache.readQuery({ query: GET_JOBS });
-    //         cache.writeQuery({
-    //             query: GET_JOBS,
-    //             data: { jobs: [...jobs, addJob] },
-    //         });
-    //     },
-    // });
-
     const [addJob]: any = useMutation(ADD_JOB, {
-        variables: { company, logo, jobTitle, jobDesc },
+        variables: { company, logo, jobTitle, jobDesc, status },
         update(cache, { data: { addJob } }) {
             const { jobs }: any = cache.readQuery({ query: GET_JOBS });
             cache.writeQuery({
@@ -37,35 +27,26 @@ const JobForm = (props: Props) => {
 
     const submitJob = (e: any) => {
         e.preventDefault();
-        if (company === '' || logo === '' || jobTitle === '' || jobDesc === '') {
+        if (
+            company === '' ||
+            logo === '' ||
+            jobTitle === '' ||
+            jobDesc === ''
+        ) {
             return alert('Please fill all fields');
         }
 
-        addJob(company, logo, jobTitle, jobDesc);
-        
+        addJob(company, logo, jobTitle, jobDesc, status);
+
         setCompany('');
         setLogo('');
         setJobTitle('');
         setJobDesc('');
         setStatus('Ignored');
         setInterviewId('');
-    };
-    // const submitJob = (e: any) => {
-    //     e.preventDefault();
-    //     if (company === '' || logo === '' || jobTitle === '' || jobDesc === '') {
-    //         return alert('Please fill all fields');
-    //     }
 
-    //     addJob(company, logo, jobTitle, jobDesc, status, interviewId);
-        
-    //     setCompany('');
-    //     setLogo('');
-    //     setJobTitle('');
-    //     setJobDesc('');
-    //     setStatus('Ignored');
-    //     setInterviewId('');
-    // };
-    
+        console.log('Submitted!');
+    };
 
     return (
         <section className="section">
@@ -73,7 +54,7 @@ const JobForm = (props: Props) => {
                 {/* COMPANY */}
 
                 <div className="field">
-                    <label className="label is-small">Company</label>
+                    <label className="label">Company</label>
                     <div className="control">
                         <input
                             className="input is-small mt-2"
@@ -88,7 +69,7 @@ const JobForm = (props: Props) => {
                 {/* LOGO */}
 
                 <div className="field">
-                    <label className="label is-small">Logo</label>
+                    <label className="label">Logo</label>
                     <div className="control">
                         <input
                             className="input is-small mt-2"
@@ -103,7 +84,7 @@ const JobForm = (props: Props) => {
                 {/* JOB */}
 
                 <div className="field">
-                    <label className="label is-small">Job</label>
+                    <label className="label">Job</label>
                     <div className="control">
                         <input
                             className="input is-small mt-2"
@@ -118,7 +99,7 @@ const JobForm = (props: Props) => {
                 {/* DESCRIPTION */}
 
                 <div className="field">
-                    <label className="label is-small">Description</label>
+                    <label className="label">Description</label>
                     <div className="control">
                         <textarea
                             className="textarea is-small mt-2"
@@ -131,52 +112,29 @@ const JobForm = (props: Props) => {
 
                 {/* STATUS */}
 
-                <div className="is-flex is-justify-content-space-between is-align-content-center my-5">
-                    <div className="select is-small">
-                        <select
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                        >
-                            <option value="Interviewing">
-                                Having an interview
-                            </option>
-                            <option value="Confirmation">
-                                Email Confirmation
-                            </option>
-                            <option value="Ignored">Completely Gosthed</option>
-                        </select>
-                    </div>
-
-                    {/* INTERVIEW */}
-
-                    <div className="control">
-                        <label className="radio">
-                            <input
-                                type="radio"
-                                name="answer"
-                                onChange={() => setInterviewId('Interviewing')}
-                                />
-                            Yes
-                        </label>
-                        <label className="radio">
-                            <input
-                                type="radio"
-                                name="answer"
-                                onChange={() => setInterviewId('No Interviews')}
-                            />
-                            No
-                        </label>
-                    </div>
+                <div className="select is-small mt-3">
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                    >
+                        <option value="Interviewing">
+                            Having an interview
+                        </option>
+                        <option value="Confirmation">Email Confirmation</option>
+                        <option value="Ignored">Completely Gosthed</option>
+                    </select>
                 </div>
 
                 {/* SUBMIT */}
-
-                <div className="field is-full mt-4">
-                    <button className="button is-primary" type="submit">
-                        Submit
-                    </button>
-                </div>
+                {status !== 'Interviewing' && (
+                    <div className="field is-full mt-5">
+                        <button className="button is-primary" type="submit">
+                            Submit
+                        </button>
+                    </div>
+                )}
             </form>
+            {status === 'Interviewing' && <InterviewForm />}
         </section>
     );
 };

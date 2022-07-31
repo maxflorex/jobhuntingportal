@@ -6,7 +6,7 @@ type Props = {};
 const Try = (props: Props) => {
     return (
         <div>
-            <div className="section has-background-info">
+            <div className="section has-background-info texture2">
                 <div className="column is-half has-background-white box is-offset-one-quarter rounded">
                     <h1 className="is-size-4 pt-6 px-4 has-text-centered has-text-weight-bold">
                         Job Application

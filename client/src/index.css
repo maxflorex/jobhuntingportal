@@ -1,3 +1,18 @@
 .rounded {
     border-radius: 0.4rem
 }
+
+.texture {
+    background-image: url("https://www.transparenttextures.com/patterns/noisy.png");
+}
+
+.texture2 {
+    background-image: url("https://www.transparenttextures.com/patterns/black-twill.png");
+}
+
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: -10
+}
