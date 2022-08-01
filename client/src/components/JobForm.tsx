@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
+import { ADD_INTERVIEW } from '../mutations/InterviewMutation';
 import { ADD_JOB } from '../mutations/JobMutation';
 import { GET_JOBS } from '../queries/jobQueries';
 import InterviewForm from './InterviewForm';
@@ -12,18 +13,40 @@ const JobForm = (props: Props) => {
     const [jobTitle, setJobTitle] = useState('');
     const [jobDesc, setJobDesc] = useState('');
     const [status, setStatus] = useState('Ignored');
-    const [interviewId, setInterviewId] = useState('No Interviews');
+    // const [interviewId, setInterviewId] = useState('No Interviews');
+
+    // ADD INTERVIEW STATES
+    const [interviewDate, setInterviewDate] = useState('');
+    const [interviewer, setInterviewer] = useState('');
+    const [notes, setNotes] = useState('');
+    const [interStatus, setInterStatus] = useState('ok');
 
     const [addJob]: any = useMutation(ADD_JOB, {
         variables: { company, logo, jobTitle, jobDesc, status },
-        update(cache, { data: { addJob } }) {
-            const { jobs }: any = cache.readQuery({ query: GET_JOBS });
-            cache.writeQuery({
-                query: GET_JOBS,
-                data: { jobs: [...jobs, addJob] },
-            });
-        },
+        refetchQueries: [{ query: GET_JOBS }],
     });
+
+    const [addInterview]: any = useMutation(ADD_INTERVIEW, {
+        variables: { interviewDate, notes, interviewer, status },
+        refetchQueries: [{ query: GET_JOBS }],
+    });
+
+    const submitInter = () => {
+        if (
+            interviewDate === '' ||
+            interStatus === '' ||
+            notes === '' ||
+            interviewer === ''
+        ) {
+            console.log('Interview submitted');
+        }
+        addInterview(interviewDate, interStatus, notes, interviewer);
+
+        setInterviewDate('');
+        setInterStatus('');
+        setNotes('');
+        setInterviewer('');
+    };
 
     const submitJob = (e: any) => {
         e.preventDefault();
@@ -36,14 +59,18 @@ const JobForm = (props: Props) => {
             return alert('Please fill all fields');
         }
 
-        addJob(company, logo, jobTitle, jobDesc, status);
+        addJob(company, logo, jobTitle, jobDesc);
+
+        if (status === 'Interviewing') {
+            submitInter();
+        }
 
         setCompany('');
         setLogo('');
         setJobTitle('');
         setJobDesc('');
         setStatus('Ignored');
-        setInterviewId('');
+        // setInterviewId('');
 
         console.log('Submitted!');
     };
@@ -57,7 +84,7 @@ const JobForm = (props: Props) => {
                     <label className="label">Company</label>
                     <div className="control">
                         <input
-                            className="input is-small mt-2"
+                            className="input mt-2"
                             type="text"
                             value={company}
                             placeholder="Company Name"
@@ -72,7 +99,7 @@ const JobForm = (props: Props) => {
                     <label className="label">Logo</label>
                     <div className="control">
                         <input
-                            className="input is-small mt-2"
+                            className="input mt-2"
                             type="text"
                             placeholder="Logo URL"
                             value={logo}
@@ -87,7 +114,7 @@ const JobForm = (props: Props) => {
                     <label className="label">Job</label>
                     <div className="control">
                         <input
-                            className="input is-small mt-2"
+                            className="input mt-2"
                             type="text"
                             placeholder="Job Name"
                             value={jobTitle}
@@ -102,7 +129,7 @@ const JobForm = (props: Props) => {
                     <label className="label">Description</label>
                     <div className="control">
                         <textarea
-                            className="textarea is-small mt-2"
+                            className="textarea mt-2"
                             placeholder="Job Description"
                             value={jobDesc}
                             onChange={(e) => setJobDesc(e.target.value)}
@@ -112,7 +139,7 @@ const JobForm = (props: Props) => {
 
                 {/* STATUS */}
 
-                <div className="select is-small mt-3">
+                <div className="select mt-3">
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
@@ -124,17 +151,25 @@ const JobForm = (props: Props) => {
                         <option value="Ignored">Completely Gosthed</option>
                     </select>
                 </div>
-
-                {/* SUBMIT */}
-                {status !== 'Interviewing' && (
-                    <div className="field is-full mt-5">
-                        <button className="button is-primary" type="submit">
-                            Submit
-                        </button>
-                    </div>
+                {status === 'Interviewing' && (
+                    <InterviewForm
+                        interviewDate={interviewDate}
+                        setInterviewDate={setInterviewDate}
+                        interviewer={interviewer}
+                        setInterviewer={setInterviewer}
+                        notes={notes}
+                        setNotes={setNotes}
+                        interStatus={interStatus}
+                        setInterStatus={setInterStatus}
+                    />
                 )}
+
+                <div className="field is-full mt-5">
+                    <button className="button is-primary" type="submit">
+                        Submit
+                    </button>
+                </div>
             </form>
-            {status === 'Interviewing' && <InterviewForm />}
         </section>
     );
 };

@@ -1,21 +1,39 @@
 import React from 'react';
 
-type Props = {};
+type Props = {
+    interviewDate: string;
+    setInterviewDate: any;
+    interviewer: string;
+    setInterviewer: any;
+    notes: string;
+    setNotes: any;
+    interStatus: string;
+    setInterStatus: any;
+};
 
-const InterviewForm = (props: Props) => {
+const InterviewForm = ({
+    interviewDate,
+    setInterviewDate,
+    interviewer,
+    setInterviewer,
+    notes,
+    setNotes,
+    interStatus,
+    setInterStatus,
+}: Props) => {
     return (
-        <div className='box is-shadowless has-background-success-light'>
+        <div className="box is-shadowless has-background-success-light mt-5">
             {/* INTERVIEW DATE */}
 
             <div className="field">
                 <label className="label">Interview Date</label>
                 <div className="control">
                     <input
-                        className="input is-small mt-2"
+                        className="input mt-2"
                         type="text"
-                        // value={company}
+                        value={interviewDate}
                         placeholder="Company Name"
-                        // onChange={(e) => setCompany(e.target.value)}
+                        onChange={(e) => setInterviewDate(e.target.value)}
                     />
                 </div>
             </div>
@@ -26,48 +44,42 @@ const InterviewForm = (props: Props) => {
                 <label className="label">Interviewer</label>
                 <div className="control">
                     <input
-                        className="input is-small mt-2"
+                        className="input mt-2"
                         type="text"
                         placeholder="Logo URL"
-                        // value={logo}
-                        // onChange={(e) => setLogo(e.target.value)}
+                        value={interviewer}
+                        onChange={(e) => setInterviewer(e.target.value)}
                     />
                 </div>
             </div>
-            
+
             {/* NOTES */}
 
             <div className="field">
                 <label className="label">Notes</label>
                 <div className="control">
                     <textarea
-                        className="textarea is-small mt-2"
+                        className="textarea mt-2"
                         placeholder="Job Description"
-                        // value={jobDesc}
-                        // onChange={(e) => setJobDesc(e.target.value)}
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
                     />
                 </div>
             </div>
 
             {/* STATUS */}
 
-            <div className="select is-small mt-3">
+            <div className="select mt-3">
                 <select
-                // value={status}
-                // onChange={(e) => setStatus(e.target.value)}
+                    value={interStatus}
+                    onChange={(e) => setInterStatus(e.target.value)}
                 >
-                    <option value="Interviewing">Having an interview</option>
-                    <option value="Confirmation">Email Confirmation</option>
-                    <option value="Ignored">Completely Gosthed</option>
+                    <option value="bad">Bad</option>
+                    <option value="ok">Ok</option>
+                    <option value="good">Good</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="superb">Superb</option>
                 </select>
-            </div>
-
-            {/* SUBMIT */}
-
-            <div className="field is-full mt-5">
-                <button className="button is-primary" type="submit">
-                    Submit
-                </button>
             </div>
         </div>
     );

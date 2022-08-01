@@ -2,13 +2,14 @@ const Job = require('../models/Job')
 const Interview = require('../models/Interview')
 
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLEnumType } = require('graphql')
+const { resolve } = require('@sanity/cli/lib/util/dynamicRequire')
 
 // DEFINE INTERVIEW TYPES
 const InterviewType = new GraphQLObjectType({
     name: 'Interview',
     fields: () => ({
         id: { type: GraphQLID },
-        InterviewDate: { type: GraphQLString, },
+        interviewDate: { type: GraphQLString, },
         notes: { type: GraphQLString, },
         interviewer: { type: GraphQLString, },
         status: { type: GraphQLString, },
@@ -146,7 +147,7 @@ const mutation = new GraphQLObjectType({
         addInterview: {
             type: InterviewType,
             args: {
-                InterviewDate: { type: GraphQLString, },
+                interviewDate: { type: GraphQLString, },
                 notes: { type: GraphQLString, },
                 interviewer: { type: GraphQLString, },
                 status: {
@@ -161,7 +162,15 @@ const mutation = new GraphQLObjectType({
                         }
                     }),
                 },
-                jobId: { type: GraphQLNonNull(GraphQLID) }
+                // jobId: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                const interview = new Interview({
+                    interviewDate: args.interviewDate,
+                    notes: args.notes,
+                    interviewer: args.interviewer,
+                });
+                return interview.save()
             }
         },
 

@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 const GET_JOBS = gql`
     query getJobs {
         jobs {
+            id
             company
             logo
             jobTitle
@@ -16,6 +17,7 @@ const GET_JOBS = gql`
 const GET_JOB = gql`
     query getJob($id: ID!) {
         job(id: $id) {
+            id
             company
             logo
             jobTitle

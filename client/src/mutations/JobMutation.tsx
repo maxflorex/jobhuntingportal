@@ -6,7 +6,7 @@ const ADD_JOB = gql`
         $logo: String!
         $jobTitle: String!
         $jobDesc: String!
-        $status:  JobStatus!
+        $status: JobStatus!
     ) {
         addJob(
             company: $company
@@ -23,31 +23,13 @@ const ADD_JOB = gql`
         }
     }
 `;
-// const ADD_JOB = gql`
-//     mutation AddJob(
-//         $company: String!
-//         $logo: String!
-//         $jobTitle: String!
-//         $jobDesc: String!
-//         $status: JobStatus!
-//         $interviewId: ID!
-//     ) {
-//         addJob(
-//             company: $company
-//             logo: $logo
-//             jobTitle: $jobTitle
-//             jobDesc: $jobDesc
-//             status: $status
-//             interviewId: $interviewId
-//         ) {
-//             company
-//             logo
-//             jobTitle
-//             jobDesc
-//             status
-//             interviewId
-//         }
-//     }
-// `;
 
-export { ADD_JOB };
+const DELETE_JOB = gql`
+    mutation DeleteJob($id: ID!) {
+        deleteJob(id:$id) {
+            id
+        }
+    }
+`;
+
+export { ADD_JOB, DELETE_JOB };

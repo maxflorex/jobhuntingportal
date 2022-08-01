@@ -16,3 +16,9 @@
     top: 0;
     z-index: -10
 }
+
+.deletebtn {
+    position: absolute;
+    right: 4rem;
+    padding-top: 0.4rem    
+}

@@ -2,24 +2,26 @@ import { gql } from '@apollo/client';
 
 const ADD_INTERVIEW = gql`
     mutation addInterview(
-        $InterviewDate: String!
+        $interviewDate: String!
         $notes: String!
         $interviewer: String!
-        $status: InterviewStatus!
-        $jobId: ID!
+        # $status: InterviewStatus!
+        # $jobId: ID!
     ) {
-        AddInterview(
-            InterviewDate: $InterviewDate
+        addInterview(
+            interviewDate: $interviewDate
             notes: $notes
             interviewer: $interviewer
-            status: $status
-            jobId: $jobId
+            # status: $status
+            # jobId: $jobId
         ) {
-            InterviewDate
+            interviewDate
             notes
             interviewer
-            status
-            jobId
+            # status
+            # jobId
         }
     }
 `;
+
+export { ADD_INTERVIEW };
