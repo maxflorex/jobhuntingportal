@@ -2,7 +2,6 @@ const Job = require('../models/Job')
 const Interview = require('../models/Interview')
 
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLEnumType } = require('graphql')
-const { resolve } = require('@sanity/cli/lib/util/dynamicRequire')
 
 // DEFINE INTERVIEW TYPES
 const InterviewType = new GraphQLObjectType({
@@ -32,6 +31,7 @@ const JobType = new GraphQLObjectType({
         logo: { type: GraphQLString, },
         jobTitle: { type: GraphQLString, },
         jobDesc: { type: GraphQLString, },
+        category: { type: GraphQLString, },
         status: { type: GraphQLString, },
         // RELATIONSHIP WITH INTERVIEW DB
         interview: {
@@ -94,6 +94,17 @@ const mutation = new GraphQLObjectType({
                 logo: { type: GraphQLString, },
                 jobTitle: { type: GraphQLString, },
                 jobDesc: { type: GraphQLString, },
+                category: {
+                    type: new GraphQLEnumType({
+                        name: 'Category',
+                        values: {
+                            'Design': { value: 'Design' },
+                            'Production': { value: 'Production' },
+                            'Development': { value: 'Development' },
+                        }
+                    }),
+                    defaultValue: 'Design'
+                },
                 status: {
                     type: new GraphQLEnumType({
                         name: 'JobStatus',
@@ -103,6 +114,7 @@ const mutation = new GraphQLObjectType({
                             'Ignored': { value: 'Completely Ghosted' },
                         }
                     }),
+                    defaultValue: 'Completely Ghosted'
                 },
                 interviewId: { type: GraphQLID }
             },
@@ -112,6 +124,7 @@ const mutation = new GraphQLObjectType({
                     logo: args.logo,
                     jobTitle: args.jobTitle,
                     jobDesc: args.jobDesc,
+                    category: args.category,
                     status: args.status,
                     interviewId: args.interviewId
                 });

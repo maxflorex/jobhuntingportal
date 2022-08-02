@@ -6,6 +6,7 @@ const ADD_JOB = gql`
         $logo: String!
         $jobTitle: String!
         $jobDesc: String!
+        $category: Category!
         $status: JobStatus!
     ) {
         addJob(
@@ -13,12 +14,14 @@ const ADD_JOB = gql`
             logo: $logo
             jobTitle: $jobTitle
             jobDesc: $jobDesc
+            category: $category
             status: $status
         ) {
             company
             logo
             jobTitle
             jobDesc
+            category
             status
         }
     }

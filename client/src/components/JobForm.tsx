@@ -5,15 +5,17 @@ import { ADD_JOB } from '../mutations/JobMutation';
 import { GET_JOBS } from '../queries/jobQueries';
 import InterviewForm from './InterviewForm';
 
-type Props = {};
+type Props = {
+    show: any;
+};
 
-const JobForm = (props: Props) => {
+const JobForm = ({ show }: Props) => {
     const [company, setCompany] = useState('');
     const [logo, setLogo] = useState('');
     const [jobTitle, setJobTitle] = useState('');
     const [jobDesc, setJobDesc] = useState('');
     const [status, setStatus] = useState('Ignored');
-    // const [interviewId, setInterviewId] = useState('No Interviews');
+    const [category, setCategory] = useState('Design');
 
     // ADD INTERVIEW STATES
     const [interviewDate, setInterviewDate] = useState('');
@@ -22,7 +24,7 @@ const JobForm = (props: Props) => {
     const [interStatus, setInterStatus] = useState('ok');
 
     const [addJob]: any = useMutation(ADD_JOB, {
-        variables: { company, logo, jobTitle, jobDesc, status },
+        variables: { company, logo, jobTitle, jobDesc, category, status },
         refetchQueries: [{ query: GET_JOBS }],
     });
 
@@ -59,7 +61,7 @@ const JobForm = (props: Props) => {
             return alert('Please fill all fields');
         }
 
-        addJob(company, logo, jobTitle, jobDesc);
+        addJob(company, logo, jobTitle, jobDesc, category);
 
         if (status === 'Interviewing') {
             submitInter();
@@ -70,7 +72,7 @@ const JobForm = (props: Props) => {
         setJobTitle('');
         setJobDesc('');
         setStatus('Ignored');
-        // setInterviewId('');
+        show(false);
 
         console.log('Submitted!');
     };
@@ -135,6 +137,19 @@ const JobForm = (props: Props) => {
                             onChange={(e) => setJobDesc(e.target.value)}
                         />
                     </div>
+                </div>
+
+                {/* CATEGORY */}
+
+                <div className="select mt-3">
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option value="Production">Production</option>
+                        <option value="Design">Design</option>
+                        <option value="Development">Development</option>
+                    </select>
                 </div>
 
                 {/* STATUS */}

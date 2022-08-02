@@ -1,8 +1,7 @@
-import React from 'react';
-import JobForm from '../components/JobForm';
 import JobList from '../components/JobList';
 import Try from '../components/Try';
 import logo from '../assets/JHLOGO.svg'
+import Footer from '../components/Footer';
 
 type Props = {};
 
@@ -16,9 +15,9 @@ const Home = (props: Props) => {
                     Organize your job search
                 </h2>
             </section>
-            {/* <JobForm /> */}
             <Try />
             <JobList />
+            <Footer />
         </>
     );
 };

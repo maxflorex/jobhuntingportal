@@ -8,6 +8,7 @@ const GET_JOBS = gql`
             logo
             jobTitle
             jobDesc
+            category
             # status
             # interviewId
         }
@@ -22,6 +23,7 @@ const GET_JOB = gql`
             logo
             jobTitle
             jobDesc
+            category
             # status
             # interviewId
         }

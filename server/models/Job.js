@@ -13,6 +13,10 @@ const JobSchema = new mongoose.Schema({
     jobDesc: {
         type: String,
     },
+    category: {
+        type: String,
+        enum: ['Design', 'Production', 'Development']
+    },
     status: {
         type: String,
         enum: ['Having an interview', 'Email confirmation', 'Completely Ghosted']

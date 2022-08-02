@@ -14,14 +14,18 @@ const JobList = (props: Props) => {
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
 
+    console.log(data);
+
     return (
         <div className="section has-background-white">
             <table className="table is-fullwidth is-hoverable">
-                <thead>
+                <thead className="has-background-white sticky2 texture">
                     <tr>
+                        <th>Number</th>
                         <th>Company</th>
                         <th>Job</th>
                         <th>Description</th>
+                        <th>Category</th>
                         <th>Interviews</th>
                     </tr>
                 </thead>
@@ -34,9 +38,35 @@ const JobList = (props: Props) => {
                                     onMouseEnter={() => setShowActions(i)}
                                     onMouseLeave={() => setShowActions('')}
                                 >
-                                    <td>{job.company}</td>
-                                    <td>{job.jobTitle}</td>
-                                    <td>{job.jobDesc}</td>
+                                    <td className="is-size-7">{i + 1}</td>
+                                    <td className="is-flex is-align-items-center">
+                                        <img
+                                            src={job.logo}
+                                            onError={(e: any) =>
+                                                (e.target.src =
+                                                    'https://www.turnkeytec.com/wp-content/uploads/2020/07/placeholder-image-400x300.jpg')
+                                            }
+                                            alt="logo"
+                                            className="logo mr-4"
+                                        />
+                                        <h2 className="is-size-7 is-italic">
+                                            {job.company}
+                                        </h2>
+                                    </td>
+                                    <td className="has-text-weight-semibold is-size-7">
+                                        {' '}
+                                        {job.jobTitle}{' '}
+                                    </td>
+                                    <td>
+                                        <a
+                                            href={job.jobDesc}
+                                            target="_blank"
+                                            className="material-symbols-outlined"
+                                        >
+                                            link
+                                        </a>
+                                    </td>
+                                    <td className='is-size-7'>{job.category}</td>
                                     <td>
                                         none
                                         {showActions === i && (
