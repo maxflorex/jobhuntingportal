@@ -6,7 +6,7 @@ type Props = {};
 const Try = (props: Props) => {
     const [showForm, setShowForm] = useState(false);
     return (
-        <div>
+        <div className=''>
             <div className="section has-background-info texture2">
                 {!showForm && (
                     <button

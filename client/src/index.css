@@ -24,8 +24,8 @@
 }
 
 .logo {
-    height: 4rem;
-    width: 4rem;    
+    height: 3rem;
+    width: 3rem;    
     object-fit: cover;
     border-radius: 100rem;
 }
@@ -41,4 +41,8 @@ td {
 .sticky2 {
      position: sticky;
      top: 0;
+}
+
+.z-10 {
+z-index: 10
 }

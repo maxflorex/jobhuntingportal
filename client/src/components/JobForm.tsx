@@ -154,7 +154,7 @@ const JobForm = ({ show }: Props) => {
 
                 {/* STATUS */}
 
-                <div className="select mt-3">
+                {/* <div className="select mt-3">
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
@@ -165,7 +165,7 @@ const JobForm = ({ show }: Props) => {
                         <option value="Confirmation">Email Confirmation</option>
                         <option value="Ignored">Completely Gosthed</option>
                     </select>
-                </div>
+                </div> */}
                 {status === 'Interviewing' && (
                     <InterviewForm
                         interviewDate={interviewDate}

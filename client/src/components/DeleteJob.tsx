@@ -14,9 +14,9 @@ const DeleteJob = ({ jobID }: Props) => {
     });
 
     return (
-        <span className="deletebtn" onClick={deleteJob}>
-            <button className="delete" />
-        </span>
+        <button className="button is-danger mx-3" onClick={deleteJob}>
+            Delete
+        </button>
     );
 };
 

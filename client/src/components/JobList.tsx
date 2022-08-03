@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { DELETE_JOB } from '../mutations/JobMutation';
 import { GET_JOBS } from '../queries/jobQueries';
 import DeleteJob from './DeleteJob';
+import EditJobModal from './EditJobModal';
 
 type Props = {};
 
@@ -21,12 +22,13 @@ const JobList = (props: Props) => {
             <table className="table is-fullwidth is-hoverable">
                 <thead className="has-background-white sticky2 texture">
                     <tr>
-                        <th>Number</th>
+                        <th>#</th>
                         <th>Company</th>
                         <th>Job</th>
                         <th>Description</th>
                         <th>Category</th>
                         <th>Interviews</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <>
@@ -66,11 +68,16 @@ const JobList = (props: Props) => {
                                             link
                                         </a>
                                     </td>
-                                    <td className='is-size-7'>{job.category}</td>
-                                    <td>
-                                        none
+                                    <td className="is-size-7">
+                                        {job.category}
+                                    </td>
+                                    <td>none</td>
+                                    <td className='is-3'>
                                         {showActions === i && (
-                                            <DeleteJob jobID={job.id} />
+                                            <div className="">
+                                                <EditJobModal />
+                                                <DeleteJob jobID={job.id} />
+                                            </div>
                                         )}
                                     </td>
                                 </tr>

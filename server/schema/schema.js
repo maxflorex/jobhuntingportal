@@ -201,7 +201,64 @@ const mutation = new GraphQLObjectType({
             }
         },
 
+
         // ? UPDATE JOB
+
+
+        updateJob: {
+            type: JobType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+                company: { type: GraphQLString, },
+                logo: { type: GraphQLString, },
+                jobTitle: { type: GraphQLString, },
+                jobDesc: { type: GraphQLString, },
+                category: {
+                    type: new GraphQLEnumType({
+                        // NEEDS AN UNIQUE NAME
+                        name: 'CategoryUpdate',
+                        values: {
+                            'Design': { value: 'Design' },
+                            'Production': { value: 'Production' },
+                            'Development': { value: 'Development' },
+                        }
+                    }),
+                    defaultValue: 'Design'
+                },
+                status: {
+                    type: new GraphQLEnumType({
+                        // NEEDS AN UNIQUE NAME
+                        name: 'JobStatusUpdate',
+                        values: {
+                            'Interviewing': { value: 'Having an interview' },
+                            'Confirmation': { value: 'Email confirmation' },
+                            'Ignored': { value: 'Completely Ghosted' },
+                        }
+                    }),
+                    defaultValue: 'Completely Ghosted'
+                },
+                interviewId: { type: GraphQLID }
+            },
+            resolve(parent, args) {
+                return Job.findByIdAndUpdate(
+                    args.id, {
+                    $set: {
+                        company: args.company,
+                        logo: args.logo,
+                        jobTitle: args.jobTitle,
+                        jobDesc: args.jobDesc,
+                        category: args.category,
+                        status: args.status,
+                        interviewId: args.interviewId
+                    }
+                },
+                    // IF NOT NEW, IT WILL CREATE THE JOB OR FIELD
+                    { new: true }
+                )
+            }
+        }
+
+
         // ? UPDATE INTERVIEW
     }
 })
