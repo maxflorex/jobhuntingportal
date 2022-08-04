@@ -72,10 +72,10 @@ const JobList = (props: Props) => {
                                         {job.category}
                                     </td>
                                     <td>none</td>
-                                    <td className='is-3'>
+                                    <td className="is-3">
                                         {showActions === i && (
                                             <div className="">
-                                                <EditJobModal />
+                                                <EditJobModal job={job} />
                                                 <DeleteJob jobID={job.id} />
                                             </div>
                                         )}
