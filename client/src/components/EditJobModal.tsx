@@ -1,16 +1,19 @@
+import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import { UPDATE_JOB } from '../mutations/JobMutation';
+import { GET_JOB } from '../queries/jobQueries';
 
 type Props = {
-    job: any
+    job: any;
 };
 
-const EditJobModal = ({job}: Props) => {
+const EditJobModal = ({ job }: Props) => {
     const [showModal, setShowModal] = useState(false);
-    const [company, setCompany] = useState('');
-    const [logo, setLogo] = useState('');
-    const [jobTitle, setJobTitle] = useState('');
-    const [jobDesc, setJobDesc] = useState('');
-    const [category, setCategory] = useState('Design');
+    const [company, setCompany] = useState(job.company);
+    const [logo, setLogo] = useState(job.logo);
+    const [jobTitle, setJobTitle] = useState(job.jobTitle);
+    const [jobDesc, setJobDesc] = useState(job.jobDesc);
+    const [category, setCategory] = useState(job.category);
 
     const closeModal = (e: any) => {
         if (e.target.classList.contains('dismiss')) {
@@ -18,12 +21,27 @@ const EditJobModal = ({job}: Props) => {
         }
     };
 
-    console.log(job);
-    
+    const [updateJob]: any = useMutation(UPDATE_JOB, {
+        variables: { id: job.id, company, logo, jobTitle, jobDesc, category },
+        refetchQueries: [{ query: GET_JOB, variables: { id: job.id } }],
+    });
 
-    const updateJob = () => {
-        
-    }
+    const update = (e: any) => {
+        e.preventDefault();
+        if (
+            company === '' ||
+            logo === '' ||
+            jobTitle === '' ||
+            jobDesc === ''
+        ) {
+            return alert('Please fill all fields');
+        }
+
+        updateJob(company, logo, jobTitle, jobDesc, category).then(() => {
+            console.log('Updated!');
+        });
+        setShowModal(false);
+    };
 
     return (
         <>
@@ -31,7 +49,7 @@ const EditJobModal = ({job}: Props) => {
                 className="button is-primary"
                 onClick={() => setShowModal(!showModal)}
             >
-                Edit
+                <span className="material-symbols-outlined">edit</span>
             </button>
             <div className={`modal ${showModal && 'is-active'}`}>
                 <div
@@ -39,7 +57,10 @@ const EditJobModal = ({job}: Props) => {
                     onClick={closeModal}
                 />
                 <section className="section">
-                    <form className="box is-shadowless z-10 p-6" onSubmit={updateJob}>
+                    <form
+                        className="box is-shadowless z-10 p-6"
+                        onSubmit={update}
+                    >
                         {/* COMPANY */}
 
                         <div className="field">

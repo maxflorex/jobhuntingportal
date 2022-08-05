@@ -42,8 +42,8 @@ const UPDATE_JOB = gql`
         $logo: String!
         $jobTitle: String!
         $jobDesc: String!
-        $category: Category!
-        $status: JobStatus!
+        # MAKE SURE TO PUT THE NEW UNIQUE NAME
+        $category: CategoryUpdate!
     ) {
         updateJob(
             id: $id
@@ -52,14 +52,12 @@ const UPDATE_JOB = gql`
             jobTitle: $jobTitle
             jobDesc: $jobDesc
             category: $category
-            status: $status
         ) {
             company
             logo
             jobTitle
             jobDesc
             category
-            status
         }
     }
 `;

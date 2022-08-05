@@ -15,8 +15,6 @@ const JobList = (props: Props) => {
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
 
-    console.log(data);
-
     return (
         <div className="section has-background-white">
             <table className="table is-fullwidth is-hoverable">

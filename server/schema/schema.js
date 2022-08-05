@@ -223,21 +223,7 @@ const mutation = new GraphQLObjectType({
                             'Development': { value: 'Development' },
                         }
                     }),
-                    defaultValue: 'Design'
-                },
-                status: {
-                    type: new GraphQLEnumType({
-                        // NEEDS AN UNIQUE NAME
-                        name: 'JobStatusUpdate',
-                        values: {
-                            'Interviewing': { value: 'Having an interview' },
-                            'Confirmation': { value: 'Email confirmation' },
-                            'Ignored': { value: 'Completely Ghosted' },
-                        }
-                    }),
-                    defaultValue: 'Completely Ghosted'
-                },
-                interviewId: { type: GraphQLID }
+                }
             },
             resolve(parent, args) {
                 return Job.findByIdAndUpdate(
@@ -248,8 +234,6 @@ const mutation = new GraphQLObjectType({
                         jobTitle: args.jobTitle,
                         jobDesc: args.jobDesc,
                         category: args.category,
-                        status: args.status,
-                        interviewId: args.interviewId
                     }
                 },
                     // IF NOT NEW, IT WILL CREATE THE JOB OR FIELD
