@@ -1,20 +1,39 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { useState } from 'react';
 import { DELETE_JOB } from '../mutations/JobMutation';
 import { GET_JOBS } from '../queries/jobQueries';
 import DeleteJob from './DeleteJob';
 import EditJobModal from './EditJobModal';
+import Pagination from './Pagination';
 
 type Props = {};
 
+// ITEMS PER PAGINATION
+let PageSize = 12;
+
 const JobList = (props: Props) => {
     const [showActions, setShowActions] = useState('');
+    //
+    const [currentPage, setCurrentPage] = useState(1);
+    const [getPagination, setGetPagination] = useState([]);
 
     const { loading, error, data } = useQuery(GET_JOBS);
 
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
 
+    // PAGINATION
+    const dataLength: any = data.jobs.length;
+
+    // useEffect(() => {
+    //     const paginatedData = () => {
+    //         const firstPageIndex = (currentPage - 1) * PageSize;
+    //         const lastPageIndex = firstPageIndex + PageSize;
+    //         return data.slice(firstPageIndex, lastPageIndex);
+    //     };
+    //     setGetPagination(paginatedData());
+    // }, [currentPage, data]);
+    
     return (
         <div className="section has-background-white">
             <table className="table is-fullwidth is-hoverable">
@@ -23,7 +42,7 @@ const JobList = (props: Props) => {
                         <th>#</th>
                         <th>Company</th>
                         <th>Job</th>
-                        <th>Description</th>
+                        <th>Link</th>
                         <th>Category</th>
                         <th>Interviews</th>
                         <th>Actions</th>
@@ -83,6 +102,13 @@ const JobList = (props: Props) => {
                     </tbody>
                 </>
             </table>
+            <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={dataLength}
+                pageSize={PageSize}
+                onPageChange={(page: any) => setCurrentPage(page)}
+            />
         </div>
     );
 };
