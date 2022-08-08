@@ -50,3 +50,7 @@ z-index: 10 !important;
 .z-5 {
 z-index: -10 !important;
 }
+
+* {
+    transition: 0.4s ease-in-out;
+}

@@ -113,12 +113,12 @@ const JobForm = ({ show }: Props) => {
                 {/* JOB */}
 
                 <div className="field">
-                    <label className="label">Job</label>
+                    <label className="label">Job Title</label>
                     <div className="control">
                         <input
                             className="input mt-2"
                             type="text"
-                            placeholder="Job Name"
+                            placeholder="Job Title"
                             value={jobTitle}
                             onChange={(e) => setJobTitle(e.target.value)}
                         />
@@ -128,11 +128,11 @@ const JobForm = ({ show }: Props) => {
                 {/* DESCRIPTION */}
 
                 <div className="field">
-                    <label className="label">Description</label>
+                    <label className="label">Link</label>
                     <div className="control">
                         <textarea
                             className="textarea mt-2"
-                            placeholder="Job Description"
+                            placeholder="Job Link"
                             value={jobDesc}
                             onChange={(e) => setJobDesc(e.target.value)}
                         />

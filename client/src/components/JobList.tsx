@@ -9,31 +9,37 @@ import Pagination from './Pagination';
 type Props = {};
 
 // ITEMS PER PAGINATION
-let PageSize = 12;
+let PageSize = 20;
 
 const JobList = (props: Props) => {
     const [showActions, setShowActions] = useState('');
-    //
+    const [dataL, setDataL] = useState(2);
     const [currentPage, setCurrentPage] = useState(1);
     const [getPagination, setGetPagination] = useState([]);
 
     const { loading, error, data } = useQuery(GET_JOBS);
 
+    useEffect(() => {
+        if (data?.jobs?.length > 0) {
+            setDataL(data?.jobs?.length);
+        }
+    }, [data]);
+
+    // PAGINATION
+    useEffect(() => {
+        const paginatedData = () => {
+            const firstPageIndex = (currentPage - 1) * PageSize;
+            const lastPageIndex = firstPageIndex + PageSize;
+            return data?.jobs?.slice(firstPageIndex, lastPageIndex);
+        };
+        setGetPagination(paginatedData());
+    }, [currentPage, data]);
+
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
 
-    // PAGINATION
-    const dataLength: any = data.jobs.length;
+    console.log(getPagination);
 
-    // useEffect(() => {
-    //     const paginatedData = () => {
-    //         const firstPageIndex = (currentPage - 1) * PageSize;
-    //         const lastPageIndex = firstPageIndex + PageSize;
-    //         return data.slice(firstPageIndex, lastPageIndex);
-    //     };
-    //     setGetPagination(paginatedData());
-    // }, [currentPage, data]);
-    
     return (
         <div className="section has-background-white">
             <table className="table is-fullwidth is-hoverable">
@@ -50,8 +56,8 @@ const JobList = (props: Props) => {
                 </thead>
                 <>
                     <tbody>
-                        {data &&
-                            data.jobs.map((job: any, i: any) => (
+                        {getPagination &&
+                            getPagination.map((job: any, i: any) => (
                                 <tr
                                     key={i}
                                     onMouseEnter={() => setShowActions(i)}
@@ -105,7 +111,7 @@ const JobList = (props: Props) => {
             <Pagination
                 className="pagination-bar"
                 currentPage={currentPage}
-                totalCount={dataLength}
+                totalCount={dataL}
                 pageSize={PageSize}
                 onPageChange={(page: any) => setCurrentPage(page)}
             />
