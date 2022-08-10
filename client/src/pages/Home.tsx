@@ -10,12 +10,13 @@ const Home = (props: Props) => {
     return (
         <>
             <section className="section is-medium has-background-link texture sticky">
-                <img src={logo} alt="" className="image is-64x64 mb-1" />
-                <h1 className="title has-text-white">Job Hunting</h1>
-                <h2 className="subtitle has-text-white">
-                    Organize your job search
-                </h2>
-                <SearchJobs />
+                <div className="container">
+                    <img src={logo} alt="" className="image is-64x64 mb-1" />
+                    <h1 className="title has-text-white">Job Hunting</h1>
+                    <h2 className="subtitle has-text-white">
+                        Organize your job search
+                    </h2>
+                </div>
             </section>
             <Try />
             <JobList />

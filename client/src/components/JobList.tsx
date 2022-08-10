@@ -42,79 +42,81 @@ const JobList = (props: Props) => {
 
     return (
         <div className="section has-background-white">
-            <table className="table is-fullwidth is-hoverable">
-                <thead className="has-background-white sticky2 texture">
-                    <tr>
-                        <th>#</th>
-                        <th>Company</th>
-                        <th>Job</th>
-                        <th>Link</th>
-                        <th>Category</th>
-                        <th>Interviews</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <>
-                    <tbody>
-                        {getPagination &&
-                            getPagination.map((job: any, i: any) => (
-                                <tr
-                                    key={i}
-                                    onMouseEnter={() => setShowActions(i)}
-                                    onMouseLeave={() => setShowActions('')}
-                                >
-                                    <td className="is-size-7">{i + 1}</td>
-                                    <td className="is-flex is-align-items-center">
-                                        <img
-                                            src={job.logo}
-                                            onError={(e: any) =>
-                                                (e.target.src =
-                                                    'https://www.turnkeytec.com/wp-content/uploads/2020/07/placeholder-image-400x300.jpg')
-                                            }
-                                            alt="logo"
-                                            className="logo mr-4"
-                                        />
-                                        <h2 className="is-size-7 is-italic">
-                                            {job.company}
-                                        </h2>
-                                    </td>
-                                    <td className="has-text-weight-semibold is-size-7">
-                                        {' '}
-                                        {job.jobTitle}{' '}
-                                    </td>
-                                    <td>
-                                        <a
-                                            href={job.jobDesc}
-                                            target="_blank"
-                                            className="material-symbols-outlined"
-                                        >
-                                            link
-                                        </a>
-                                    </td>
-                                    <td className="is-size-7">
-                                        {job.category}
-                                    </td>
-                                    <td>none</td>
-                                    <td className="is-3">
-                                        {showActions === i && (
-                                            <div className="">
-                                                <EditJobModal job={job} />
-                                                <DeleteJob jobID={job.id} />
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </>
-            </table>
-            <Pagination
-                className="pagination-bar"
-                currentPage={currentPage}
-                totalCount={dataL}
-                pageSize={PageSize}
-                onPageChange={(page: any) => setCurrentPage(page)}
-            />
+            <div className="container">
+                <table className="table is-fullwidth is-hoverable">
+                    <thead className="has-background-white sticky2 texture">
+                        <tr>
+                            <th>#</th>
+                            <th>Company</th>
+                            <th>Job</th>
+                            <th>Link</th>
+                            <th>Category</th>
+                            <th>Interviews</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <>
+                        <tbody>
+                            {getPagination &&
+                                getPagination.map((job: any, i: any) => (
+                                    <tr
+                                        key={i}
+                                        onMouseEnter={() => setShowActions(i)}
+                                        onMouseLeave={() => setShowActions('')}
+                                    >
+                                        <td className="is-size-7">{i + 1}</td>
+                                        <td className="is-flex is-align-items-center">
+                                            <img
+                                                src={job.logo}
+                                                onError={(e: any) =>
+                                                    (e.target.src =
+                                                        'https://www.turnkeytec.com/wp-content/uploads/2020/07/placeholder-image-400x300.jpg')
+                                                }
+                                                alt="logo"
+                                                className="logo mr-4"
+                                            />
+                                            <h2 className="is-size-7 is-italic">
+                                                {job.company}
+                                            </h2>
+                                        </td>
+                                        <td className="has-text-weight-semibold is-size-7">
+                                            {' '}
+                                            {job.jobTitle}{' '}
+                                        </td>
+                                        <td>
+                                            <a
+                                                href={job.jobDesc}
+                                                target="_blank"
+                                                className="material-symbols-outlined"
+                                            >
+                                                link
+                                            </a>
+                                        </td>
+                                        <td className="is-size-7">
+                                            {job.category}
+                                        </td>
+                                        <td>none</td>
+                                        <td className="is-3">
+                                            {showActions === i && (
+                                                <div className="">
+                                                    <EditJobModal job={job} />
+                                                    <DeleteJob jobID={job.id} />
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </>
+                </table>
+                <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={dataL}
+                    pageSize={PageSize}
+                    onPageChange={(page: any) => setCurrentPage(page)}
+                />
+            </div>
         </div>
     );
 };

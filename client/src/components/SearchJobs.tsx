@@ -5,7 +5,7 @@ type Props = {};
 const SearchJobs = (props: Props) => {
     return (
         <div className='z-10'>
-            <input type="text" className="input " />
+            <input type="text" className="input " placeholder='Serch Company or Job...' />
         </div>
     );
 };
