@@ -2,7 +2,6 @@ import JobList from '../components/JobList';
 import Try from '../components/Try';
 import logo from '../assets/JHLOGO.svg';
 import Footer from '../components/Footer';
-import SearchJobs from '../components/SearchJobs';
 
 type Props = {};
 

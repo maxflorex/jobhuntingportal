@@ -38,8 +38,6 @@ const JobList = (props: Props) => {
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
 
-    console.log(getPagination);
-
     return (
         <div className="section has-background-white">
             <div className="container">

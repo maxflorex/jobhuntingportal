@@ -64,9 +64,9 @@ const Pagination = (props: any) => {
                                 &#8230;
                             </li>
                         );
-                    }
-
-                    // RENDER PAGE PILS
+                    }        
+                    
+                    // RENDER PAGE PILL
                     return (
                         <li
                             key={i}
