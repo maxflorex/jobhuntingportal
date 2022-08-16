@@ -30,6 +30,13 @@
     border-radius: 100rem;
 }
 
+.logoSm {
+    height: 1.2rem;
+    width: 1.2rem;    
+    object-fit: cover;
+    border-radius: 100rem;
+}
+
 td {
     vertical-align: middle !important;
 }

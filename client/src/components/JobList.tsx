@@ -36,7 +36,7 @@ const JobList = (props: Props) => {
     }, [currentPage, data]);
 
     if (loading) return null;
-    if (error) return <p>Something went wrong :(</p>;
+    if (error) return <p>Something went wrong :(</p>;    
 
     return (
         <div className="section has-background-white">
@@ -44,7 +44,6 @@ const JobList = (props: Props) => {
                 <table className="table is-fullwidth is-hoverable">
                     <thead className="has-background-white sticky2 texture">
                         <tr>
-                            <th>#</th>
                             <th>Company</th>
                             <th>Job</th>
                             <th>Link</th>
@@ -62,13 +61,12 @@ const JobList = (props: Props) => {
                                         onMouseEnter={() => setShowActions(i)}
                                         onMouseLeave={() => setShowActions('')}
                                     >
-                                        <td className="is-size-7">{i + 1}</td>
                                         <td className="is-flex is-align-items-center">
                                             <img
                                                 src={job.logo}
                                                 onError={(e: any) =>
-                                                    (e.target.src =
-                                                        'https://www.turnkeytec.com/wp-content/uploads/2020/07/placeholder-image-400x300.jpg')
+                                                (e.target.src =
+                                                    'https://www.turnkeytec.com/wp-content/uploads/2020/07/placeholder-image-400x300.jpg')
                                                 }
                                                 alt="logo"
                                                 className="logo mr-4"
@@ -94,13 +92,9 @@ const JobList = (props: Props) => {
                                             {job.category}
                                         </td>
                                         <td>none</td>
-                                        <td className="is-3">
-                                            {showActions === i && (
-                                                <div className="">
-                                                    <EditJobModal job={job} />
-                                                    <DeleteJob jobID={job.id} />
-                                                </div>
-                                            )}
+                                        <td className="columns is-2">
+                                                <EditJobModal job={job} />
+                                                <DeleteJob jobID={job.id} />
                                         </td>
                                     </tr>
                                 ))}

@@ -46,7 +46,7 @@ const EditJobModal = ({ job }: Props) => {
     return (
         <>
             <button
-                className="button is-primary"
+                className="button is-primary p-1 is-size-7 column mr-2"
                 onClick={() => setShowModal(!showModal)}
             >
                 <span className="material-symbols-outlined">edit</span>
