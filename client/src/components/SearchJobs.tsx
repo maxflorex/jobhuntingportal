@@ -30,20 +30,19 @@ const SearchJobs = (props: Props) => {
     const chunked = _.chunk(suggestions, 4);
 
     // CLICK HANDLER
-    const hanldeCLick = (dog: any) => {
+    const hanldeCLick = () => {
         setText('');
     };
 
     return (
         <>
-            <div className='is-flex-direction-column'>
-                <div className='z-10 is-full'>
-                    <input type="text" className="input " placeholder='Serch Company or Job...' onChange={(e) => onChangeHandler(e.target.value)} />
-                </div>
-                {chunked.length > 0 &&
-                    <SearchSuggestions data={chunked} />
-                }
+            <div className='search-input'>
+                <span className="material-symbols-outlined">search</span>
+                <input type="text" className="input " placeholder='Search Company or Job...' onChange={(e) => onChangeHandler(e.target.value)} />
             </div>
+            {chunked.length > 0 &&
+                <SearchSuggestions data={chunked} />
+            }
         </>
     );
 };

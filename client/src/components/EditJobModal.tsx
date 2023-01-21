@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { UPDATE_JOB } from '../mutations/JobMutation';
 import { GET_JOB } from '../queries/jobQueries';
 
@@ -18,6 +18,7 @@ const EditJobModal = ({ job }: Props) => {
     const closeModal = (e: any) => {
         if (e.target.classList.contains('dismiss')) {
             setShowModal(false);
+            document.body.style.overflow = 'auto'
         }
     };
 
@@ -43,113 +44,86 @@ const EditJobModal = ({ job }: Props) => {
         setShowModal(false);
     };
 
+    const handleShowModal = (e: React.SyntheticEvent) => {
+        e.preventDefault()
+        setShowModal(true)
+        document.body.style.overflow = 'hidden'
+    }
+
     return (
         <>
-            <button
-                className="button is-primary p-1 is-size-7 column mr-2"
-                onClick={() => setShowModal(!showModal)}
-            >
+
+            <button onClick={handleShowModal} >
                 <span className="material-symbols-outlined">edit</span>
             </button>
-            <div className={`modal ${showModal && 'is-active'}`}>
-                <div
-                    className="modal-background dismiss z-5"
-                    onClick={closeModal}
-                />
-                <section className="section">
-                    <form
-                        className="box is-shadowless z-10 p-6"
-                        onSubmit={update}
-                    >
-                        {/* COMPANY */}
 
-                        <div className="field">
+            {showModal &&
+
+                <div className='modal' onClick={closeModal}>
+                    <section className="flex-center">
+                        <form onSubmit={update}>
+
+
+                            {/* COMPANY */}
                             <label className="label">Company</label>
-                            <div className="control">
-                                <input
-                                    className="input mt-2"
-                                    type="text"
-                                    value={company}
-                                    placeholder="Company Name"
-                                    onChange={(e) => setCompany(e.target.value)}
-                                />
-                            </div>
-                        </div>
-
-                        {/* LOGO */}
-
-                        <div className="field">
+                            <input
+                                className="input mt-2"
+                                type="text"
+                                value={company}
+                                placeholder="Company Name"
+                                onChange={(e) => setCompany(e.target.value)}
+                            />
+                            {/* LOGO */}
                             <label className="label">Logo</label>
-                            <div className="control">
-                                <input
-                                    className="input mt-2"
-                                    type="text"
-                                    placeholder="Logo URL"
-                                    value={logo}
-                                    onChange={(e) => setLogo(e.target.value)}
-                                />
-                            </div>
-                        </div>
+                            <input
+                                className="input mt-2"
+                                type="text"
+                                placeholder="Logo URL"
+                                value={logo}
+                                onChange={(e) => setLogo(e.target.value)}
+                            />
 
-                        {/* JOB */}
-
-                        <div className="field">
+                            {/* JOB */}
                             <label className="label">Job</label>
-                            <div className="control">
-                                <input
-                                    className="input mt-2"
-                                    type="text"
-                                    placeholder="Job Name"
-                                    value={jobTitle}
-                                    onChange={(e) =>
-                                        setJobTitle(e.target.value)
-                                    }
-                                />
-                            </div>
-                        </div>
+                            <input
+                                className="input mt-2"
+                                type="text"
+                                placeholder="Job Name"
+                                value={jobTitle}
+                                onChange={(e) =>
+                                    setJobTitle(e.target.value)
+                                }
+                            />
 
-                        {/* DESCRIPTION */}
-
-                        <div className="field">
+                            {/* DESCRIPTION */}
                             <label className="label">Description</label>
-                            <div className="control">
-                                <textarea
-                                    className="textarea mt-2"
-                                    placeholder="Job Description"
-                                    value={jobDesc}
-                                    onChange={(e) => setJobDesc(e.target.value)}
-                                />
+                            <textarea
+                                className="textarea mt-2"
+                                placeholder="Job Description"
+                                value={jobDesc}
+                                onChange={(e) => setJobDesc(e.target.value)}
+                            />
+
+                            {/* CATEGORY */}
+                            <div className="select mt-3">
+                                <select
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)}
+                                >
+                                    <option value="Production">Production</option>
+                                    <option value="Design">Design</option>
+                                    <option value="Development">Development</option>
+                                </select>
                             </div>
-                        </div>
 
-                        {/* CATEGORY */}
-
-                        <div className="select mt-3">
-                            <select
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                            >
-                                <option value="Production">Production</option>
-                                <option value="Design">Design</option>
-                                <option value="Development">Development</option>
-                            </select>
-                        </div>
-
-                        <div className="field is-full mt-5">
                             <button className="button is-primary" type="submit">
                                 Submit
                             </button>
-                        </div>
-                    </form>
-                </section>
-                <button
-                    className="modal-close is-large"
-                    aria-label="close"
-                    onClick={() => setShowModal(!showModal)}
-                >
-                    Close
-                </button>
-            </div>
+                        </form>
+                    </section>
+                    <button onClick={closeModal} className='dismiss'>Close</button>
+                </div>
+            }
         </>
     );
 };

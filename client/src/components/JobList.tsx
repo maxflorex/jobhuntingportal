@@ -36,79 +36,75 @@ const JobList = (props: Props) => {
     }, [currentPage, data]);
 
     if (loading) return null;
-    if (error) return <p>Something went wrong :(</p>;    
+    if (error) return <p>Something went wrong :(</p>;
 
     return (
-        <div className="section has-background-white">
-            <div className="container">
-                <table className="table is-fullwidth is-hoverable">
-                    <thead className="has-background-white sticky2 texture">
-                        <tr>
-                            <th>Company</th>
-                            <th>Job</th>
-                            <th>Link</th>
-                            <th>Category</th>
-                            <th>Interviews</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <>
-                        <tbody>
-                            {getPagination &&
-                                getPagination.map((job: any, i: any) => (
-                                    <tr
-                                        key={i}
-                                        onMouseEnter={() => setShowActions(i)}
-                                        onMouseLeave={() => setShowActions('')}
+        <div className='job-list'>
+            <table>
+
+
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Job</th>
+                        <th>Link</th>
+                        <th>Category</th>
+                        <th>Interviews</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    {getPagination &&
+                        getPagination.map((job: any, i: any) => (
+                            <tr
+                                key={i}
+                                onMouseEnter={() => setShowActions(i)}
+                                onMouseLeave={() => setShowActions('')}
+                            >
+                                <td>
+                                    <div>
+                                        <img
+                                            src={job.logo}
+                                            onError={(e: any) =>
+                                            (e.target.src =
+                                                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png')
+                                            }
+                                            alt="logo"
+                                        />
+                                        {job.company}
+                                    </div>
+                                </td>
+                                <td>{job.jobTitle}</td>
+                                <td>
+                                    <a
+                                        href={job.jobDesc}
+                                        target="_blank"
+                                        className="material-symbols-outlined"
                                     >
-                                        <td className="is-flex is-align-items-center">
-                                            <img
-                                                src={job.logo}
-                                                onError={(e: any) =>
-                                                (e.target.src =
-                                                    'https://www.turnkeytec.com/wp-content/uploads/2020/07/placeholder-image-400x300.jpg')
-                                                }
-                                                alt="logo"
-                                                className="logo mr-4"
-                                            />
-                                            <h2 className="is-size-7 is-italic">
-                                                {job.company}
-                                            </h2>
-                                        </td>
-                                        <td className="has-text-weight-semibold is-size-7">
-                                            {' '}
-                                            {job.jobTitle}{' '}
-                                        </td>
-                                        <td>
-                                            <a
-                                                href={job.jobDesc}
-                                                target="_blank"
-                                                className="material-symbols-outlined"
-                                            >
-                                                link
-                                            </a>
-                                        </td>
-                                        <td className="is-size-7">
-                                            {job.category}
-                                        </td>
-                                        <td>none</td>
-                                        <td className="columns is-2">
-                                                <EditJobModal job={job} />
-                                                <DeleteJob jobID={job.id} />
-                                        </td>
-                                    </tr>
-                                ))}
-                        </tbody>
-                    </>
-                </table>
-                <Pagination
-                    className="pagination-bar"
-                    currentPage={currentPage}
-                    totalCount={dataL}
-                    pageSize={PageSize}
-                    onPageChange={(page: any) => setCurrentPage(page)}
-                />
-            </div>
+                                        link
+                                    </a>
+                                </td>
+                                <td>{job.category}</td>
+                                <td>none</td>
+                                <td>
+                                    <EditJobModal job={job} />
+                                    <DeleteJob jobID={job.id} />
+                                </td>
+                            </tr>
+                        ))}
+                </tbody>
+
+
+            </table>
+            <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={dataL}
+                pageSize={PageSize}
+                onPageChange={(page: any) => setCurrentPage(page)}
+            />
         </div>
     );
 };

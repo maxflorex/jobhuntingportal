@@ -18,37 +18,38 @@ const DeleteJob = ({ jobID }: Props) => {
     const closeModal = (e: any) => {
         if (e.target.classList.contains('dismiss')) {
             setShow(false);
+            document.body.style.overflow = 'auto'
         }
+
     };
+
+    const handleShowModal = (e: React.SyntheticEvent) => {
+        e.preventDefault()
+        setShow(true)
+        document.body.style.overflow = 'hidden'
+    }
 
 
     return (
         <>
-            <button className="button is-danger material-symbols-outlined p-1 is-size-7 column" onClick={() => setShow(true)}>
-            delete
-        </button>
-        <div className={`modal ${show && 'is-active'}`}>
-                <div
-                    className="modal-background dismiss z-5"
-                    onClick={closeModal}
-                />
-                <section className="section">
-                    <div
-                        className="box is-shadowless z-10 p-6"
-                    >
-                       <h1 className='has-text-centered pb-4'> Are you sure about this?</h1>
-                        <div className="columns">
-                            <div className="column">
+            <button className="button is-danger material-symbols-outlined p-1 is-size-7 column" onClick={handleShowModal}>
+                delete
+            </button>
 
-                            <button className="button is-primary dismiss" onClick={closeModal}>God, please no! noooo!</button>
-                            </div>
-                            <div className="column">
-
-                            <button className="button is-danger">Hell yes!</button>
+            {show &&
+                <div className='modal'>
+                    <div onClick={closeModal} />
+                    <section>
+                        <div>
+                            <h1> Are you sure about this?</h1>
+                            <div>
+                                <button className="button is-primary dismiss" onClick={closeModal}>God, please no! noooo!</button>
+                                <button className="button is-danger">Hell yes!</button>
                             </div>
                         </div>
-                        </div></section>
-            </div>
+                    </section>
+                </div>
+            }
         </>
     );
 };

@@ -77,84 +77,61 @@ const JobForm = ({ show }: Props) => {
         console.log('Submitted!');
     };
 
+    const handleCLose = (e: React.SyntheticEvent) => {
+        e.preventDefault()
+        show(false)
+    }
+
     return (
-        <section className="section">
-            <form className="box is-shadowless" onSubmit={submitJob}>
-                {/* COMPANY */}
+        <form onSubmit={submitJob}>
+            <h3>Job Application</h3>
 
-                <div className="field">
-                    <label className="label">Company</label>
-                    <div className="control">
-                        <input
-                            className="input mt-2"
-                            type="text"
-                            value={company}
-                            placeholder="Company Name"
-                            onChange={(e) => setCompany(e.target.value)}
-                        />
-                    </div>
-                </div>
+            {/* COMPANY */}
+            <label>Company</label>
+            <input
+                type="text"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+            />
 
-                {/* LOGO */}
+            {/* LOGO */}
+            <label>Logo</label>
+            <input
+                type="text"
+                value={logo}
+                onChange={(e) => setLogo(e.target.value)}
+            />
 
-                <div className="field">
-                    <label className="label">Logo</label>
-                    <div className="control">
-                        <input
-                            className="input mt-2"
-                            type="text"
-                            placeholder="Logo URL"
-                            value={logo}
-                            onChange={(e) => setLogo(e.target.value)}
-                        />
-                    </div>
-                </div>
+            {/* JOB */}
+            <label>Job Title</label>
+            <input
+                type="text"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
+            />
 
-                {/* JOB */}
+            {/* DESCRIPTION */}
+            <label>Link</label>
+            <textarea
+                className="textarea mt-2"
+                value={jobDesc}
+                onChange={(e) => setJobDesc(e.target.value)}
+            />
 
-                <div className="field">
-                    <label className="label">Job Title</label>
-                    <div className="control">
-                        <input
-                            className="input mt-2"
-                            type="text"
-                            placeholder="Job Title"
-                            value={jobTitle}
-                            onChange={(e) => setJobTitle(e.target.value)}
-                        />
-                    </div>
-                </div>
+            {/* CATEGORY */}
+            <label>Category</label>
+            <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+            >
+                <option value="Production">Production</option>
+                <option value="Design">Design</option>
+                <option value="Development">Development</option>
+            </select>
 
-                {/* DESCRIPTION */}
+            {/* STATUS */}
 
-                <div className="field">
-                    <label className="label">Link</label>
-                    <div className="control">
-                        <textarea
-                            className="textarea mt-2"
-                            placeholder="Job Link"
-                            value={jobDesc}
-                            onChange={(e) => setJobDesc(e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                {/* CATEGORY */}
-
-                <div className="select mt-3">
-                    <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                    >
-                        <option value="Production">Production</option>
-                        <option value="Design">Design</option>
-                        <option value="Development">Development</option>
-                    </select>
-                </div>
-
-                {/* STATUS */}
-
-                {/* <div className="select mt-3">
+            {/* <div className="select mt-3">
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
@@ -166,26 +143,23 @@ const JobForm = ({ show }: Props) => {
                         <option value="Ignored">Completely Gosthed</option>
                     </select>
                 </div> */}
-                {status === 'Interviewing' && (
-                    <InterviewForm
-                        interviewDate={interviewDate}
-                        setInterviewDate={setInterviewDate}
-                        interviewer={interviewer}
-                        setInterviewer={setInterviewer}
-                        notes={notes}
-                        setNotes={setNotes}
-                        interStatus={interStatus}
-                        setInterStatus={setInterStatus}
-                    />
-                )}
-
-                <div className="field is-full mt-5">
-                    <button className="button is-primary" type="submit">
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </section>
+            {status === 'Interviewing' && (
+                <InterviewForm
+                    interviewDate={interviewDate}
+                    setInterviewDate={setInterviewDate}
+                    interviewer={interviewer}
+                    setInterviewer={setInterviewer}
+                    notes={notes}
+                    setNotes={setNotes}
+                    interStatus={interStatus}
+                    setInterStatus={setInterStatus}
+                />
+            )}
+            <button type="submit">Submit</button>
+            <button className='btn-close' onClick={handleCLose}>
+                <span className="material-symbols-outlined">close</span>
+            </button>
+        </form>
     );
 };
 
