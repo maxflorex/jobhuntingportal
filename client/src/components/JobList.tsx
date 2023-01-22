@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { DELETE_JOB } from '../mutations/JobMutation';
 import { GET_JOBS } from '../queries/jobQueries';
@@ -15,18 +15,17 @@ const JobList = () => {
     const [dataL, setDataL] = useState(2);
     const [currentPage, setCurrentPage] = useState(1);
     const [getPagination, setGetPagination] = useState([]);
+    const [showEdit, setShowEdit] = useState(false)
+    const [showDelete, setShowDelete] = useState(false)
+    const [selectedJob, setSelectedJob] = useState([])
+    const [selectedId, setSelectedId] = useState('')
     const suggestions = useSelector((state: any) => state.suggestions.value)
 
     // LOADASH
     const chunkedSuggestions = _.chunk(suggestions, 4);
 
-    console.log(chunkedSuggestions);
-
-
-
     // FECTH JOBS
     const { loading, error, data } = useQuery(GET_JOBS);
-
 
     // DATA LOADER LISTENER
     useEffect(() => {
@@ -34,7 +33,6 @@ const JobList = () => {
             setDataL(data?.jobs?.length);
         }
     }, [data]);
-
 
     // PAGINATION
     useEffect(() => {
@@ -55,12 +53,25 @@ const JobList = () => {
         }
     }
 
+    // HANDLERS
+    const getId = (e: React.SyntheticEvent, id: string) => {
+        e.preventDefault()
+        setSelectedId(id)
+        setShowDelete(true)
+    }
+
+    const getJob = (e: React.SyntheticEvent, job: any) => {
+        e.preventDefault()
+        setSelectedJob(job)
+        setShowEdit(true)
+    }
+
 
     // RETURNS
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
 
-    return (
+    return (<>
         <div className='job-list'>
             <table>
 
@@ -109,8 +120,10 @@ const JobList = () => {
                             <td data-label='Category'>{job.category}</td>
                             <td data-label='Interview'>none</td>
                             <td data-label='Actions'>
-                                <EditJobModal job={job} />
-                                <DeleteJob jobID={job.id} />
+                                <div>
+                                    <button className="material-symbols-outlined btn-light" onClick={(e) => getJob(e, job)}>edit</button>
+                                    <button className="material-symbols-outlined btn-light" onClick={(e) => getId(e, job.id)}>delete</button>
+                                </div>
                             </td>
                         </tr>
                     ))}
@@ -126,6 +139,9 @@ const JobList = () => {
                 onPageChange={(page: any) => setCurrentPage(page)}
             />
         </div>
+        {showEdit && <EditJobModal job={selectedJob} setShowEdit={setShowEdit} />}
+        {showDelete && <DeleteJob jobID={selectedId} setShowDelete={setShowDelete} />}
+    </>
     );
 };
 

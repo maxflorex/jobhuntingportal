@@ -23,7 +23,8 @@ const SearchJobs = (props: Props) => {
         dispatch(suggestions(matches))
     }, [text])
 
-    const clearText = () => {
+    const clearText = (e: React.SyntheticEvent) => {
+        e.preventDefault()
         setText('');
     };
 
@@ -31,9 +32,9 @@ const SearchJobs = (props: Props) => {
     return (
         <>
             <div className='search-input'>
-                <span className="material-symbols-outlined">search</span>
-                {text.length > 0 &&
-                    <span className="material-symbols-outlined mod" onClick={clearText}>close</span>
+                {text.length > 0 ?
+                    <span className="material-symbols-outlined mod" onClick={clearText}>close</span> :
+                    <span className="material-symbols-outlined">search</span>
                 }
                 <input type="text" value={text} className="input" placeholder='Search Company or Job...' onChange={(e) => setText(e.target.value)} />
             </div>

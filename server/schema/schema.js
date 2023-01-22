@@ -1,7 +1,7 @@
 const Job = require('../models/Job')
 const Interview = require('../models/Interview')
 
-const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLEnumType } = require('graphql')
+const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLEnumType, GraphQLInputObjectType } = require('graphql')
 
 // DEFINE INTERVIEW TYPES
 const InterviewType = new GraphQLObjectType({
@@ -22,6 +22,7 @@ const InterviewType = new GraphQLObjectType({
     })
 })
 
+
 // DEFINE JOB TYPES
 const JobType = new GraphQLObjectType({
     name: 'Job',
@@ -40,8 +41,40 @@ const JobType = new GraphQLObjectType({
                 return Interview.findById(parent.interviewId)
             }
         },
+        user: {
+            type: UsersType,
+            resolve(parent, args) {
+                return Users.findById(parent.userId)
+            }
+        }
     })
 })
+
+
+// USER TYPES
+const UsersType = new GraphQLObjectType({
+    name: 'Users',
+    fields: () => ({
+        id: { type: GraphQLID },
+        username: { type: GraphQLString },
+        email: { type: GraphQLString },
+        hashedPw: { type: GraphQLString }
+    })
+})
+
+
+// ! DEFINE INPUT TYPE FOR DATA ARGUMENTS
+
+// USER INPUTS
+const UserInputType = new GraphQLInputObjectType({
+    name: 'UserInput',
+    fields: () => ({
+        username: { type: GraphQLString },
+        email: { type: GraphQLString },
+        pw: { type: GraphQLString }
+    })
+})
+
 
 // DEFINE ROOT QUERIES
 const RootQuery = new GraphQLObjectType({
@@ -75,6 +108,36 @@ const RootQuery = new GraphQLObjectType({
                 return Interview.findById(args.id)
             }
         },
+        users: {
+            type: new GraphQLList(UsersType),
+            resolve(parent, args) {
+                return Users.find()
+            }
+        },
+        user: {
+            type: UsersType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return Users.findById(args.id)
+            }
+        },
+        login: {
+            type: UsersType,
+            args: { data: { type: UserInputType } },
+            resolve: async (parent, args) => {
+
+                const username = args.data.username
+                const user = await Users.findOne({ username })
+                const match = await bcrypt.compare(args.data.pw, user.hashedPw)
+
+                if (match) {
+                    return user
+                } else {
+                    return null
+                }
+
+            }
+        }
     }
 })
 
@@ -82,6 +145,69 @@ const RootQuery = new GraphQLObjectType({
 const mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
+        
+
+        // * ADD USER
+
+        addUser: {
+            type: UsersType,
+            args: {
+                data: { type: UserInputType }
+            },
+            resolve(parent, args) {
+
+                const registration = async () => {
+                    const username = args.data.username
+                    const email = args.data.email
+                    const password = await bcrypt.hash(args.data.pw, 12)
+
+                    const newUser = new Users({
+                        username: username,
+                        email: email,
+                        hashedPw: password
+                    })
+
+                    return await newUser.save()
+                }
+
+                return registration()
+
+            }
+        },
+
+
+        // * UPDATE USER
+
+        updateUser: {
+            type: UsersType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                data: { type: UserInputType }
+            },
+            resolve(parent, args) {
+                return Users.findByIdAndUpdate(args.id, args.data)
+            }
+        },
+
+
+        // * DELETE USER
+
+        deleteUser: {
+            type: UsersType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                // REMOVE LINKED EXPENSES
+                Job.find({ userId: args.id }).then((j) => {
+                    j.forEach((x) => {
+                        x.remove()
+                    })
+                })
+
+                return Users.findByIdAndRemove(args.id)
+            }
+        },
 
 
         // * ADD JOB
@@ -116,7 +242,8 @@ const mutation = new GraphQLObjectType({
                     }),
                     defaultValue: 'Completely Ghosted'
                 },
-                interviewId: { type: GraphQLID }
+                interviewId: { type: GraphQLID },
+                userId: { type: GraphQLID },
             },
             resolve(parent, args) {
                 const job = new Job({
@@ -126,7 +253,8 @@ const mutation = new GraphQLObjectType({
                     jobDesc: args.jobDesc,
                     category: args.category,
                     status: args.status,
-                    interviewId: args.interviewId
+                    interviewId: args.interviewId,
+                    userId: args.interviewId
                 });
                 return job.save()
             }

@@ -5,10 +5,10 @@ import { GET_JOBS } from '../queries/jobQueries';
 
 type Props = {
     jobID: string;
+    setShowDelete: any
 };
 
-const DeleteJob = ({ jobID }: Props) => {
-    const [show, setShow] = useState(false)
+const DeleteJob = ({ jobID, setShowDelete }: Props) => {
 
     const [deleteJob]: any = useMutation(DELETE_JOB, {
         variables: { id: jobID },
@@ -16,15 +16,9 @@ const DeleteJob = ({ jobID }: Props) => {
     });
 
     const closeModal = () => {
-        setShow(false);
-        document.body.style.overflow = 'auto'
+        setShowDelete(false);
+        document.body.style.overflow = 'visible'
     };
-
-    const handleShowModal = (e: React.SyntheticEvent) => {
-        e.preventDefault()
-        setShow(true)
-        document.body.style.overflow = 'hidden'
-    }
 
     const handleDelete = () => {
         deleteJob().then(() => {
@@ -35,21 +29,15 @@ const DeleteJob = ({ jobID }: Props) => {
 
     return (
         <>
-            <button className="material-symbols-outlined btn-light" onClick={handleShowModal}>
-                delete
-            </button>
-
-            {show &&
-                <div className='modal'>
-                    <section className='flex-center' style={{ gap: '1rem' }}>
-                        <h2> Are you sure about this?</h2>
-                        <div className='flex-row'>
-                            <button onClick={closeModal}>God, please no! noooo!</button>
-                            <button className="btn-danger" onClick={handleDelete}>Yes, delete</button>
-                        </div>
-                    </section>
-                </div>
-            }
+            <div className='modal'>
+                <section className='flex-center' style={{ gap: '1rem' }}>
+                    <h1 style={{textAlign: 'center', lineHeight: '4rem', margin: '2rem 0'}}> Are you sure about this?</h1>
+                    <div className='flex-row'>
+                        <button onClick={closeModal}>God, please no! noooo!</button>
+                        <button className="btn-danger" onClick={handleDelete}>Yes, delete</button>
+                    </div>
+                </section>
+            </div>
         </>
     );
 };

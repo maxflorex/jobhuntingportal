@@ -5,10 +5,10 @@ import { GET_JOB } from '../queries/jobQueries';
 
 type Props = {
     job: any;
+    setShowEdit: any
 };
 
-const EditJobModal = ({ job }: Props) => {
-    const [showModal, setShowModal] = useState(false);
+const EditJobModal = ({ job, setShowEdit }: Props) => {
     const [company, setCompany] = useState(job.company);
     const [logo, setLogo] = useState(job.logo);
     const [jobTitle, setJobTitle] = useState(job.jobTitle);
@@ -17,7 +17,7 @@ const EditJobModal = ({ job }: Props) => {
 
     const closeModal = (e: any) => {
         if (e.target.classList.contains('dismiss')) {
-            setShowModal(false);
+            setShowEdit(false);
             document.body.style.overflow = 'auto'
         }
     };
@@ -41,88 +41,74 @@ const EditJobModal = ({ job }: Props) => {
         updateJob(company, logo, jobTitle, jobDesc, category).then(() => {
             console.log('Updated!');
         });
-        setShowModal(false);
+        setShowEdit(false);
     };
 
-    const handleShowModal = (e: React.SyntheticEvent) => {
-        e.preventDefault()
-        setShowModal(true)
-        document.body.style.overflow = 'hidden'
-    }
-
     return (
-        <>
+        <div className='modal' onClick={closeModal}>
+            <section className="flex-center">
+                <form onSubmit={update}>
+                    <h3>Edit Application</h3>
 
-            <button className="material-symbols-outlined btn-light" onClick={handleShowModal}>edit</button>
+                    {/* COMPANY */}
+                    <label className="label">Company</label>
+                    <input
+                        className="input mt-2"
+                        type="text"
+                        value={company}
+                        placeholder="Company Name"
+                        onChange={(e) => setCompany(e.target.value)}
+                    />
+                    {/* LOGO */}
+                    <label className="label">Logo</label>
+                    <input
+                        className="input mt-2"
+                        type="text"
+                        placeholder="Logo URL"
+                        value={logo}
+                        onChange={(e) => setLogo(e.target.value)}
+                    />
 
-            {showModal &&
+                    {/* JOB */}
+                    <label className="label">Job</label>
+                    <input
+                        className="input mt-2"
+                        type="text"
+                        placeholder="Job Name"
+                        value={jobTitle}
+                        onChange={(e) =>
+                            setJobTitle(e.target.value)
+                        }
+                    />
 
-                <div className='modal' onClick={closeModal}>
-                    <section className="flex-center">
-                        <form onSubmit={update}>
-                            <h3>Edit Application</h3>
+                    {/* DESCRIPTION */}
+                    <label className="label">Description</label>
+                    <textarea
+                        className="textarea mt-2"
+                        placeholder="Job Description"
+                        value={jobDesc}
+                        onChange={(e) => setJobDesc(e.target.value)}
+                    />
 
-                            {/* COMPANY */}
-                            <label className="label">Company</label>
-                            <input
-                                className="input mt-2"
-                                type="text"
-                                value={company}
-                                placeholder="Company Name"
-                                onChange={(e) => setCompany(e.target.value)}
-                            />
-                            {/* LOGO */}
-                            <label className="label">Logo</label>
-                            <input
-                                className="input mt-2"
-                                type="text"
-                                placeholder="Logo URL"
-                                value={logo}
-                                onChange={(e) => setLogo(e.target.value)}
-                            />
+                    {/* CATEGORY */}
+                    <label>Category</label>
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option value="Production">Production</option>
+                        <option value="Design">Design</option>
+                        <option value="Development">Development</option>
+                    </select>
 
-                            {/* JOB */}
-                            <label className="label">Job</label>
-                            <input
-                                className="input mt-2"
-                                type="text"
-                                placeholder="Job Name"
-                                value={jobTitle}
-                                onChange={(e) =>
-                                    setJobTitle(e.target.value)
-                                }
-                            />
-
-                            {/* DESCRIPTION */}
-                            <label className="label">Description</label>
-                            <textarea
-                                className="textarea mt-2"
-                                placeholder="Job Description"
-                                value={jobDesc}
-                                onChange={(e) => setJobDesc(e.target.value)}
-                            />
-
-                            {/* CATEGORY */}
-                            <label>Category</label>
-                            <select
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                            >
-                                <option value="Production">Production</option>
-                                <option value="Design">Design</option>
-                                <option value="Development">Development</option>
-                            </select>
-
-                            <button type="submit">
-                                Submit
-                            </button>
-                            <button onClick={closeModal} className='dismiss btn-close'> <span className="material-symbols-outlined">close</span></button>
-                        </form>
-                    </section>
-                </div>
-            }
-        </>
-    );
+                    <button type="submit">
+                        Submit
+                    </button>
+                    <button onClick={closeModal} className='dismiss btn-close'> <span className="material-symbols-outlined">close</span></button>
+                </form>
+            </section>
+        </div>
+    )
 };
 
 export default EditJobModal;

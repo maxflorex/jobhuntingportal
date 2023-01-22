@@ -8,9 +8,11 @@ const Home = (props: Props) => {
     return (
         <>
             <div className="hero">
-                <img src={logo} alt="" className="" />
-                <h1 className="">Job Hunting</h1>
-                <h4 className="">Organize your job search</h4>
+                <div>
+                    <img src={logo} alt="Logo" />
+                    <h1>Job Hunting</h1>
+                    <h4>Organize your job search</h4>
+                </div>
             </div>
             <Actions />
             <JobList />
