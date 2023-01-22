@@ -83,83 +83,86 @@ const JobForm = ({ show }: Props) => {
     }
 
     return (
-        <form onSubmit={submitJob}>
-            <h3>Job Application</h3>
+        <div className="flex-center">
 
-            {/* COMPANY */}
-            <label>Company</label>
-            <input
-                type="text"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-            />
+            <form onSubmit={submitJob}>
+                <h3>Job Application</h3>
 
-            {/* LOGO */}
-            <label>Logo</label>
-            <input
-                type="text"
-                value={logo}
-                onChange={(e) => setLogo(e.target.value)}
-            />
+                {/* COMPANY */}
+                <label>Company</label>
+                <input
+                    type="text"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                />
 
-            {/* JOB */}
-            <label>Job Title</label>
-            <input
-                type="text"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-            />
+                {/* LOGO */}
+                <label>Logo</label>
+                <input
+                    type="text"
+                    value={logo}
+                    onChange={(e) => setLogo(e.target.value)}
+                />
 
-            {/* DESCRIPTION */}
-            <label>Link</label>
-            <textarea
-                className="textarea mt-2"
-                value={jobDesc}
-                onChange={(e) => setJobDesc(e.target.value)}
-            />
+                {/* JOB */}
+                <label>Job Title</label>
+                <input
+                    type="text"
+                    value={jobTitle}
+                    onChange={(e) => setJobTitle(e.target.value)}
+                />
 
-            {/* CATEGORY */}
-            <label>Category</label>
-            <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-            >
-                <option value="Production">Production</option>
-                <option value="Design">Design</option>
-                <option value="Development">Development</option>
-            </select>
+                {/* DESCRIPTION */}
+                <label>Link</label>
+                <textarea
+                    className="textarea mt-2"
+                    value={jobDesc}
+                    onChange={(e) => setJobDesc(e.target.value)}
+                />
 
-            {/* STATUS */}
+                {/* CATEGORY */}
+                <label>Category</label>
+                <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                >
+                    <option value="Production">Production</option>
+                    <option value="Design">Design</option>
+                    <option value="Development">Development</option>
+                </select>
 
-            {/* <div className="select mt-3">
+                {/* STATUS */}
+
+                {/* <div className="select mt-3">
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                     >
-                        <option value="Interviewing">
-                            Having an interview
+                    <option value="Interviewing">
+                    Having an interview
                         </option>
                         <option value="Confirmation">Email Confirmation</option>
                         <option value="Ignored">Completely Gosthed</option>
-                    </select>
-                </div> */}
-            {status === 'Interviewing' && (
-                <InterviewForm
-                    interviewDate={interviewDate}
-                    setInterviewDate={setInterviewDate}
-                    interviewer={interviewer}
-                    setInterviewer={setInterviewer}
-                    notes={notes}
-                    setNotes={setNotes}
-                    interStatus={interStatus}
-                    setInterStatus={setInterStatus}
-                />
-            )}
-            <button type="submit">Submit</button>
-            <button className='btn-close' onClick={handleCLose}>
-                <span className="material-symbols-outlined">close</span>
-            </button>
-        </form>
+                        </select>
+                    </div> */}
+                {status === 'Interviewing' && (
+                    <InterviewForm
+                        interviewDate={interviewDate}
+                        setInterviewDate={setInterviewDate}
+                        interviewer={interviewer}
+                        setInterviewer={setInterviewer}
+                        notes={notes}
+                        setNotes={setNotes}
+                        interStatus={interStatus}
+                        setInterStatus={setInterStatus}
+                    />
+                )}
+                <button type="submit">Submit</button>
+                <button className='btn-close' onClick={handleCLose}>
+                    <span className="material-symbols-outlined">close</span>
+                </button>
+            </form>
+        </div>
     );
 };
 

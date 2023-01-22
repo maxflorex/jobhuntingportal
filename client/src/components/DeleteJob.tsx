@@ -15,12 +15,9 @@ const DeleteJob = ({ jobID }: Props) => {
         refetchQueries: [{ query: GET_JOBS }],
     });
 
-    const closeModal = (e: any) => {
-        if (e.target.classList.contains('dismiss')) {
-            setShow(false);
-            document.body.style.overflow = 'auto'
-        }
-
+    const closeModal = () => {
+        setShow(false);
+        document.body.style.overflow = 'auto'
     };
 
     const handleShowModal = (e: React.SyntheticEvent) => {
@@ -29,23 +26,26 @@ const DeleteJob = ({ jobID }: Props) => {
         document.body.style.overflow = 'hidden'
     }
 
+    const handleDelete = () => {
+        deleteJob().then(() => {
+            closeModal()
+        })
+    }
+
 
     return (
         <>
-            <button className="button is-danger material-symbols-outlined p-1 is-size-7 column" onClick={handleShowModal}>
+            <button className="material-symbols-outlined btn-light" onClick={handleShowModal}>
                 delete
             </button>
 
             {show &&
                 <div className='modal'>
-                    <div onClick={closeModal} />
-                    <section>
-                        <div>
-                            <h1> Are you sure about this?</h1>
-                            <div>
-                                <button className="button is-primary dismiss" onClick={closeModal}>God, please no! noooo!</button>
-                                <button className="button is-danger">Hell yes!</button>
-                            </div>
+                    <section className='flex-center' style={{ gap: '1rem' }}>
+                        <h2> Are you sure about this?</h2>
+                        <div className='flex-row'>
+                            <button onClick={closeModal}>God, please no! noooo!</button>
+                            <button className="btn-danger" onClick={handleDelete}>Yes, delete</button>
                         </div>
                     </section>
                 </div>

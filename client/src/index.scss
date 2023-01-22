@@ -1,6 +1,7 @@
 $textures: (
     1: url('https://www.transparenttextures.com/patterns/noisy.png'),
     2: url('https://www.transparenttextures.com/patterns/black-twill.png'),
+    3: url('https://www.transparenttextures.com/patterns/diagonal-noise.png'),
 ) !default;
 
 $color: (
@@ -48,7 +49,7 @@ $screen: (
     }
 
     @include media {
-        max-width: 400px;
+        max-width: 100%;
     }
 }
 
@@ -164,6 +165,7 @@ form {
     border: 2px solid black;
     filter: drop-shadow(2px 4px 0px black);
     @include flex(column, center, center, 1rem, auto);
+    @include container;
     border-radius: 0.4rem;
     max-width: 24rem;
 
@@ -178,6 +180,14 @@ form {
     textarea,
     select {
         background-color: map-get($color, 2);
+    }
+
+    @include media {
+        padding: 3rem;
+
+        h3 {
+            font-size: 1.6rem;
+        }
     }
 }
 
@@ -207,40 +217,29 @@ table {
     @include container;
     width: 100%;
     border-spacing: 0.4rem;
-    // border-collapse: collapse;
-    // border: 2px solid black;
-    // border-radius: 0.6rem;
-    // padding: 2rem;
-    // overflow: hidden;
-    // background: white;
-    // filter: drop-shadow(2px 4px 0px black);
-    // background-image: map-get($textures, 2);
-    // background-blend-mode: overlay;
 }
 
-thead,
-tr {
-    background-color: map-get($color, 2);
-    background-image: map-get($textures, 1);
+thead {
+    @include media(map-get($screen, md)) {
+        display: none;
+    }
 }
 
-td,
 th {
+    background-color: map-get($color, 3);
+    padding: 0.5rem 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-radius: 0.4rem;
+    background-image: map-get($textures, 3);
+}
+
+td {
     padding: 0.6rem;
     text-align: left;
     vertical-align: middle;
-    border-radius: 0.2rem;
+    border-radius: 0.4rem;
     height: 100%;
-
-    &:not(th) {
-        background-color: white;
-        // filter: drop-shadow(3px 4px 0px #fcca4360);
-        // border: 2px solid #fcca4360;
-    }
-
-    div {
-        @include flex(row, flex-start, center, 1rem);
-    }
 
     img {
         width: 2rem;
@@ -249,39 +248,90 @@ th {
         border-radius: 0.4rem;
     }
 
-    button,
-    a {
-        background-color: transparent;
-        border: 0;
-        filter: none;
-        padding: 0.4rem;
-        margin: 0;
-        background-image: none;
-        color: map-get($color, 2);
-        border: 2px solid white;
-        border-radius: 0.4rem;
+    div {
+        @include flex(row, flex-start, center, 1rem);
+    }
+
+    @include media(map-get($screen, 'md')) {
+        @include flex(column, flex-start, flex-end, 2rem);
+
+        &:nth-child(even) {
+            background-color: map-get($color, 1);
+        }
+
+        div {
+            @include flex(row, flex-end, center, 1rem);
+            margin: 0;
+        }
+
+        img {
+            width: 1.8rem;
+            height: 1.4rem;
+        }
+
+        &:before {
+            content: attr(data-label);
+            position: absolute;
+            left: 3rem;
+            font-weight: bold;
+        }
+    }
+
+    &:last-child {
+        @include flex(row, flex-end, center, 1rem);
+    }
+}
+
+tr {
+    background-color: white;
+    transition: all;
+    transition-duration: 250ms;
+    position: relative;
+
+    &:hover {
+        background-color: map-get($color, 1);
+    }
+
+    @include media(map-get($screen, md)) {
+        @include flex(column, center, center, 0);
+        margin-bottom: 1rem;
+        border-radius: 0.6rem;
+        padding: 2rem;
+        position: static;
+
+        &:not(th) {
+            filter: drop-shadow(2px 4px 0px black);
+            border: 2px solid black;
+        }
 
         &:hover {
-            color: black;
-            border: 2px solid black;
-            background-color: transparent;
+            background-color: white;
+            filter: drop-shadow(2px 4px 0px #fcca43);
+            border: 2px solid #fcca43;
         }
     }
 }
 
 .try {
     background-color: map-get($color, 4);
-    @include flex(column, center, center, 2rem);
     padding: 6rem 0;
     border-bottom: 2px solid black;
     background-image: map-get($textures, 2);
     position: relative;
+    width: 100%;
 }
 
 .try-options {
-    @include container();
-    @include flex(row, space-between, center, 1rem);
+    @include flex(row, space-between, center, 1rem, 100%);
+    @include container;
     padding: 0 2rem;
+    margin: auto;
+
+    @include media(map-get($screen, md)) {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+    }
 }
 
 .hero {
@@ -291,9 +341,20 @@ th {
     gap: 0.6rem;
     border-bottom: 2px solid black;
     background-image: map-get($textures, 1);
+    box-sizing: border-box;
 
     & img {
         width: 3rem;
+    }
+
+    @include media() {
+        padding: 4rem 0rem;
+        box-sizing: border-box;
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+        }
     }
 }
 
@@ -304,10 +365,54 @@ th {
     background-color: map-get($color, 4);
     filter: none;
     padding: 0.2rem;
+
+    &.mod {
+        top: 0;
+        right: 0;
+        margin: 2rem;
+        background-color: map-get($color, 3);
+        filter: drop-shadow(2px 4px 0px black);
+        &:active {
+            filter: none;
+        }
+    }
+}
+
+.btn-light {
+    background-color: transparent;
+    border: 0;
+    filter: none;
+    padding: 0.4rem;
+    margin: 0;
+    background-image: none;
+    color: map-get($color, 2);
+    border: 2px solid transparent;
+    border-radius: 0.4rem;
+
+    &:hover {
+        color: black;
+        border: 2px solid black;
+        background-color: transparent;
+    }
+
+    @include media(map-get($screen, md)) {
+        padding: 0;
+        border: 0;
+
+        &:hover {
+            border: 0;
+        }
+    }
+}
+
+.btn-danger {
+    background-color: map-get($color, 1);
 }
 
 .search-input {
     @include flex(row, center, center, 0, auto);
+    position: relative;
+
     span {
         background-color: map-get($color, 4);
         border: 2px solid black;
@@ -315,11 +420,30 @@ th {
         border-radius: 0.4rem;
         margin: -2rem -1rem 0 0;
         z-index: 10;
+
+        &.mod {
+            background-color: map-get($color, 1);
+            position: absolute;
+            right: 0;
+            bottom: -0.6rem;
+            cursor: pointer;
+        }
     }
 
     &:hover {
         span {
             background-color: map-get($color, 2);
+            &.mod {
+                background-color: map-get($color, 4);
+            }
+        }
+    }
+
+    @include media {
+        span {
+            &.mod {
+                display: none;
+            }
         }
     }
 }
@@ -327,6 +451,7 @@ th {
 .active-search {
     position: absolute;
     top: -1.6rem;
+    @include flex;
 
     input {
         background-color: white;
@@ -343,6 +468,11 @@ th {
 .job-list {
     @include flex;
     padding: 4rem;
+
+    @include media() {
+        padding: 2rem;
+        position: static;
+    }
 }
 
 .modal {
@@ -350,13 +480,35 @@ th {
     top: 0;
     left: 0;
     background-color: map-get($color, 1);
+    background-image: map-get($textures, 2);
     min-height: 100vh;
     width: 100%;
     z-index: 400;
+
+    @include media {
+        position: absolute;
+    }
 }
 
 .flex-center {
-    @include flex;
+    @include flex(column);
     position: relative;
-    background-color: red;
+    padding: 4rem;
+}
+
+.flex-row {
+    @include flex(row, center, center, 1rem, auto);
+    position: relative;
+}
+
+.link {
+    text-decoration: underline;
+    text-underline-offset: 0.8rem;
+    &:hover {
+        color: map-get($color, 3);
+    }
+
+    @include media {
+        font-size: 2rem;
+    }
 }

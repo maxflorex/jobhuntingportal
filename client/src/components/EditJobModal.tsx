@@ -53,16 +53,14 @@ const EditJobModal = ({ job }: Props) => {
     return (
         <>
 
-            <button onClick={handleShowModal} >
-                <span className="material-symbols-outlined">edit</span>
-            </button>
+            <button className="material-symbols-outlined btn-light" onClick={handleShowModal}>edit</button>
 
             {showModal &&
 
                 <div className='modal' onClick={closeModal}>
                     <section className="flex-center">
                         <form onSubmit={update}>
-
+                            <h3>Edit Application</h3>
 
                             {/* COMPANY */}
                             <label className="label">Company</label>
@@ -105,23 +103,22 @@ const EditJobModal = ({ job }: Props) => {
                             />
 
                             {/* CATEGORY */}
-                            <div className="select mt-3">
-                                <select
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                >
-                                    <option value="Production">Production</option>
-                                    <option value="Design">Design</option>
-                                    <option value="Development">Development</option>
-                                </select>
-                            </div>
+                            <label>Category</label>
+                            <select
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                            >
+                                <option value="Production">Production</option>
+                                <option value="Design">Design</option>
+                                <option value="Development">Development</option>
+                            </select>
 
-                            <button className="button is-primary" type="submit">
+                            <button type="submit">
                                 Submit
                             </button>
+                            <button onClick={closeModal} className='dismiss btn-close'> <span className="material-symbols-outlined">close</span></button>
                         </form>
                     </section>
-                    <button onClick={closeModal} className='dismiss'>Close</button>
                 </div>
             }
         </>

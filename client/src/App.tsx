@@ -1,6 +1,8 @@
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
+import { store } from './redux/store';
 
 // PREVENT CACHE WARING
 const cache = new InMemoryCache({
@@ -31,15 +33,17 @@ const client: any = new ApolloClient({
 function App() {
     return (
         <>
-            <ApolloProvider client={client}>
-                <Router>
-                    <Routes>
-                        <Route>
-                            <Route path="/" element={<Home />} />
-                        </Route>
-                    </Routes>
-                </Router>
-            </ApolloProvider>
+            <Provider store={store}>
+                <ApolloProvider client={client}>
+                    <Router>
+                        <Routes>
+                            <Route>
+                                <Route path="/" element={<Home />} />
+                            </Route>
+                        </Routes>
+                    </Router>
+                </ApolloProvider>
+            </Provider>
         </>
     );
 }

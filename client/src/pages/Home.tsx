@@ -1,5 +1,5 @@
 import JobList from '../components/JobList';
-import Try from '../components/Try';
+import Actions from '../components/ActionBar';
 import logo from '../assets/JHLOGO.svg';
 
 type Props = {};
@@ -7,14 +7,12 @@ type Props = {};
 const Home = (props: Props) => {
     return (
         <>
-            <section className="">
-                <div className="hero">
-                    <img src={logo} alt="" className="" />
-                    <h1 className="">Job Hunting</h1>
-                    <h4 className="">Organize your job search</h4>
-                </div>
-            </section>
-            <Try />
+            <div className="hero">
+                <img src={logo} alt="" className="" />
+                <h1 className="">Job Hunting</h1>
+                <h4 className="">Organize your job search</h4>
+            </div>
+            <Actions />
             <JobList />
             <footer>
                 <p>

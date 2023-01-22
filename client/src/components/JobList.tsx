@@ -5,25 +5,36 @@ import { GET_JOBS } from '../queries/jobQueries';
 import DeleteJob from './DeleteJob';
 import EditJobModal from './EditJobModal';
 import Pagination from './Pagination';
-
-type Props = {};
+import { useSelector } from 'react-redux'
+import _ from 'lodash';
 
 // ITEMS PER PAGINATION
 let PageSize = 20;
 
-const JobList = (props: Props) => {
-    const [showActions, setShowActions] = useState('');
+const JobList = () => {
     const [dataL, setDataL] = useState(2);
     const [currentPage, setCurrentPage] = useState(1);
     const [getPagination, setGetPagination] = useState([]);
+    const suggestions = useSelector((state: any) => state.suggestions.value)
 
+    // LOADASH
+    const chunkedSuggestions = _.chunk(suggestions, 4);
+
+    console.log(chunkedSuggestions);
+
+
+
+    // FECTH JOBS
     const { loading, error, data } = useQuery(GET_JOBS);
 
+
+    // DATA LOADER LISTENER
     useEffect(() => {
         if (data?.jobs?.length > 0) {
             setDataL(data?.jobs?.length);
         }
     }, [data]);
+
 
     // PAGINATION
     useEffect(() => {
@@ -35,6 +46,17 @@ const JobList = (props: Props) => {
         setGetPagination(paginatedData());
     }, [currentPage, data]);
 
+    // DISPLAY DATA
+    const results = () => {
+        if (getPagination && suggestions.length === 0) {
+            return getPagination
+        } else {
+            return chunkedSuggestions[0]
+        }
+    }
+
+
+    // RETURNS
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
 
@@ -42,9 +64,9 @@ const JobList = (props: Props) => {
         <div className='job-list'>
             <table>
 
-
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Company</th>
                         <th>Job</th>
                         <th>Link</th>
@@ -56,44 +78,42 @@ const JobList = (props: Props) => {
 
 
                 <tbody>
-                    {getPagination &&
-                        getPagination.map((job: any, i: any) => (
-                            <tr
-                                key={i}
-                                onMouseEnter={() => setShowActions(i)}
-                                onMouseLeave={() => setShowActions('')}
-                            >
-                                <td>
-                                    <div>
-                                        <img
-                                            src={job.logo}
-                                            onError={(e: any) =>
-                                            (e.target.src =
-                                                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png')
-                                            }
-                                            alt="logo"
-                                        />
-                                        {job.company}
-                                    </div>
-                                </td>
-                                <td>{job.jobTitle}</td>
-                                <td>
-                                    <a
-                                        href={job.jobDesc}
-                                        target="_blank"
-                                        className="material-symbols-outlined"
-                                    >
-                                        link
-                                    </a>
-                                </td>
-                                <td>{job.category}</td>
-                                <td>none</td>
-                                <td>
-                                    <EditJobModal job={job} />
-                                    <DeleteJob jobID={job.id} />
-                                </td>
-                            </tr>
-                        ))}
+                    {results()?.map((job: any, i: any) => (
+                        <tr
+                            key={i}
+                        >
+                            <td data-label='#'>{i + 1}</td>
+                            <td data-label='Company'>
+                                <div>
+                                    <img
+                                        src={job.logo}
+                                        onError={(e: any) =>
+                                        (e.target.src =
+                                            'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png')
+                                        }
+                                        alt="logo"
+                                    />
+                                    {job.company}
+                                </div>
+                            </td>
+                            <td data-label='Title'>{job.jobTitle}</td>
+                            <td data-label='Link'>
+                                <a
+                                    href={job.jobDesc}
+                                    target="_blank"
+                                    className="material-symbols-outlined btn-light"
+                                >
+                                    link
+                                </a>
+                            </td>
+                            <td data-label='Category'>{job.category}</td>
+                            <td data-label='Interview'>none</td>
+                            <td data-label='Actions'>
+                                <EditJobModal job={job} />
+                                <DeleteJob jobID={job.id} />
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
 
 
