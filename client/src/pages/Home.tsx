@@ -3,13 +3,10 @@ import Actions from '../components/ActionBar';
 import logo from '../assets/JHLOGO.svg';
 import { useSelector } from 'react-redux';
 import { Login } from '../components/Login';
+import Navigation from '../components/Navigation';
 
-type Props = {};
-
-const Home = (props: Props) => {
+const Home = () => {
     const auth: any = useSelector((state: any) => state.currentState.value)
-
-    console.log(auth.length);
 
     if (auth.length === 0) {
         return <Login />
@@ -17,6 +14,7 @@ const Home = (props: Props) => {
 
     return (
         <>
+            <Navigation />
             <div className="hero">
                 <div>
                     <img src={logo} alt="Logo" />

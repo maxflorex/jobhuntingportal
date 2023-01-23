@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ADD_INTERVIEW } from '../mutations/InterviewMutation';
 import { ADD_JOB } from '../mutations/JobMutation';
 import { GET_JOBS } from '../queries/jobQueries';
@@ -16,6 +17,9 @@ const JobForm = ({ show }: Props) => {
     const [jobDesc, setJobDesc] = useState('');
     const [status, setStatus] = useState('Ignored');
     const [category, setCategory] = useState('Design');
+    const user: any = useSelector((state: any) => state.currentState.value)
+    const { id } = user
+
 
     // ADD INTERVIEW STATES
     const [interviewDate, setInterviewDate] = useState('');
@@ -23,14 +27,16 @@ const JobForm = ({ show }: Props) => {
     const [notes, setNotes] = useState('');
     const [interStatus, setInterStatus] = useState('ok');
 
+
     const [addJob]: any = useMutation(ADD_JOB, {
-        variables: { company, logo, jobTitle, jobDesc, category, status },
-        refetchQueries: [{ query: GET_JOBS }],
+        variables: { company, logo, jobTitle, jobDesc, category, status, userId: id },
+        refetchQueries: [{ query: GET_JOBS, variables: { userId: id } }],
     });
+
 
     const [addInterview]: any = useMutation(ADD_INTERVIEW, {
         variables: { interviewDate, notes, interviewer, status },
-        refetchQueries: [{ query: GET_JOBS }],
+        refetchQueries: [{ query: GET_JOBS, variables: { userId: id } }],
     });
 
     const submitInter = () => {
@@ -52,6 +58,7 @@ const JobForm = ({ show }: Props) => {
 
     const submitJob = (e: any) => {
         e.preventDefault();
+
         if (
             company === '' ||
             logo === '' ||
@@ -61,107 +68,105 @@ const JobForm = ({ show }: Props) => {
             return alert('Please fill all fields');
         }
 
-        addJob(company, logo, jobTitle, jobDesc, category);
+        addJob(company, logo, jobTitle, jobDesc, category, id).then((e: any) => {
+            show(false)
+            document.body.style.overflow = 'visible'
+        })
 
         if (status === 'Interviewing') {
             submitInter();
         }
-
-        setCompany('');
-        setLogo('');
-        setJobTitle('');
-        setJobDesc('');
-        setStatus('Ignored');
-        show(false);
-
-        console.log('Submitted!');
     };
 
     const handleCLose = (e: React.SyntheticEvent) => {
         e.preventDefault()
         show(false)
+        document.body.style.overflow = 'visible'
     }
 
     return (
-        <div className="flex-center">
+        <div className="modal">
+            <div className="flex-center">
 
-            <form onSubmit={submitJob}>
-                <h3>Job Application</h3>
 
-                {/* COMPANY */}
-                <label>Company</label>
-                <input
-                    type="text"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                />
+                <form onSubmit={submitJob}>
+                    <h3>Job Application</h3>
 
-                {/* LOGO */}
-                <label>Logo</label>
-                <input
-                    type="text"
-                    value={logo}
-                    onChange={(e) => setLogo(e.target.value)}
-                />
+                    {/* COMPANY */}
+                    <label>Company</label>
+                    <input
+                        type="text"
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                    />
 
-                {/* JOB */}
-                <label>Job Title</label>
-                <input
-                    type="text"
-                    value={jobTitle}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                />
+                    {/* LOGO */}
+                    <label>Logo</label>
+                    <input
+                        type="text"
+                        value={logo}
+                        onChange={(e) => setLogo(e.target.value)}
+                    />
 
-                {/* DESCRIPTION */}
-                <label>Link</label>
-                <textarea
-                    className="textarea mt-2"
-                    value={jobDesc}
-                    onChange={(e) => setJobDesc(e.target.value)}
-                />
+                    {/* JOB */}
+                    <label>Job Title</label>
+                    <input
+                        type="text"
+                        value={jobTitle}
+                        onChange={(e) => setJobTitle(e.target.value)}
+                    />
 
-                {/* CATEGORY */}
-                <label>Category</label>
-                <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                >
-                    <option value="Production">Production</option>
-                    <option value="Design">Design</option>
-                    <option value="Development">Development</option>
-                </select>
+                    {/* DESCRIPTION */}
+                    <label>Link</label>
+                    <textarea
+                        className="textarea mt-2"
+                        value={jobDesc}
+                        onChange={(e) => setJobDesc(e.target.value)}
+                    />
 
-                {/* STATUS */}
-
-                {/* <div className="select mt-3">
+                    {/* CATEGORY */}
+                    <label>Category</label>
                     <select
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option value="Production">Production</option>
+                        <option value="Design">Design</option>
+                        <option value="Development">Development</option>
+                    </select>
+
+                    {/* STATUS */}
+
+                    {/* <div className="select mt-3">
+                    <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
                     >
                     <option value="Interviewing">
                     Having an interview
-                        </option>
+                    </option>
                         <option value="Confirmation">Email Confirmation</option>
                         <option value="Ignored">Completely Gosthed</option>
                         </select>
                     </div> */}
-                {status === 'Interviewing' && (
-                    <InterviewForm
-                        interviewDate={interviewDate}
-                        setInterviewDate={setInterviewDate}
-                        interviewer={interviewer}
-                        setInterviewer={setInterviewer}
-                        notes={notes}
-                        setNotes={setNotes}
-                        interStatus={interStatus}
-                        setInterStatus={setInterStatus}
-                    />
-                )}
-                <button type="submit">Submit</button>
-                <button className='btn-close' onClick={handleCLose}>
-                    <span className="material-symbols-outlined">close</span>
-                </button>
-            </form>
+                    {status === 'Interviewing' && (
+                        <InterviewForm
+                            interviewDate={interviewDate}
+                            setInterviewDate={setInterviewDate}
+                            interviewer={interviewer}
+                            setInterviewer={setInterviewer}
+                            notes={notes}
+                            setNotes={setNotes}
+                            interStatus={interStatus}
+                            setInterStatus={setInterStatus}
+                        />
+                    )}
+                    <button type="submit">Submit</button>
+                    <button className='btn-close' onClick={handleCLose}>
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

@@ -192,6 +192,27 @@ form {
     }
 }
 
+header {
+    background-color: map-get($color, 3 );
+    background-image: map-get($textures, 2 );
+    border-bottom: 2px solid black;
+    padding: 1rem;
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+
+    @include media(map-get($screen, md)) {
+        display: block;
+    }
+}
+
+nav {
+    @include flex(row, space-between, center, 0);
+    // @include container();
+    margin: auto;
+}
+
 button {
     border-radius: 0.4rem;
     padding: 0.6rem 1rem;
@@ -413,6 +434,13 @@ tr {
     }
 }
 
+.logout {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    background-color:  map-get($color, 1 );
+}
+
 .btn-light {
     background-color: transparent;
     border: 0;
@@ -533,7 +561,10 @@ tr {
     }
 
     @include media {
-        font-size: 2rem;
+
+        &:not(.mod) {
+            font-size: 2rem;
+        }
     }
 }
 
@@ -545,5 +576,11 @@ tr {
 
     & h3 {
         text-align: center;
+    }
+}
+
+.mobile-hide {
+    @include media(map-get($screen, md)) {
+        display: none;
     }
 }

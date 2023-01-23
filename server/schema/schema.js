@@ -85,15 +85,9 @@ const RootQuery = new GraphQLObjectType({
         // JOB & JOBS
         jobs: {
             type: new GraphQLList(JobType),
-            resolve(parent, args) {
-                return Job.find(args.id)
-            }
-        },
-        job: {
-            type: JobType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                return Job.findById(args.id)
+                return Job.find({ userId: args.id })
             }
         },
         // INTERVIEW & INTERVIEWS
@@ -123,23 +117,6 @@ const RootQuery = new GraphQLObjectType({
                 return Users.findById(args.id)
             }
         },
-        login: {
-            type: UsersType,
-            args: { data: { type: UserInputType } },
-            resolve: async (parent, args) => {
-
-                const username = args.data.username
-                const user = await Users.findOne({ username })
-                const match = await bcrypt.compare(args.data.pw, user.hashedPw)
-
-                if (match) {
-                    return user
-                } else {
-                    return null
-                }
-
-            }
-        }
     }
 })
 
@@ -192,6 +169,44 @@ const mutation = new GraphQLObjectType({
         },
 
 
+        // * DELETE USER
+
+        deleteUser: {
+            type: UsersType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                // REMOVE LINKED EXPENSES
+                Job.find({ userId: args.id }).then((j) => {
+                    j.forEach((project) => {
+                        project.remove()
+                    })
+                })
+
+                return Users.findByIdAndRemove(args.id)
+            }
+        },
+
+
+        // * DELETE ALL PROJECTS
+
+        deleteAllJobs: {
+            type: UsersType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                // REMOVE LINKED EXPENSES
+                Job.find({ userId: args.id }).then((j) => {
+                    j.forEach((project) => {
+                        project.remove()
+                    })
+                })
+                
+                return Users.findById(args.id)
+            }
+        },
         // * DELETE USER
 
         deleteUser: {
@@ -382,7 +397,30 @@ const mutation = new GraphQLObjectType({
                     { new: true }
                 )
             }
-        }
+        },
+
+
+        // * LOGIN
+
+        userLogin: {
+            type: UsersType,
+            args: {
+                data: { type: UserInputType }
+            },
+            resolve: async (parent, args, req, res) => {
+
+                const username = args.data.username
+                const user = await Users.findOne({ username })
+                const match = await bcrypt.compare(args.data.pw, user.hashedPw)
+
+                if (match) {
+                    return user
+                } else {
+                    return null
+                }
+
+            }
+        },
 
 
         // ? UPDATE INTERVIEW

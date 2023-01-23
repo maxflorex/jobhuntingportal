@@ -4,17 +4,12 @@ import OptionsModal from './OptionsModal';
 import SearchJobs from './SearchJobs';
 
 type Props = {
- 
+
 };
 
 const Try = (props: Props) => {
     const [showForm, setShowForm] = useState(false);
     const [showOptions, setShowOptions] = useState(false)
-
-    const exit = () => {
-        setShowForm(false)
-        document.body.style.overflow = 'visible'
-    }
 
     const handleShowOptions = (e: React.SyntheticEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -26,7 +21,7 @@ const Try = (props: Props) => {
         <div className="try">
             <div className={`${showForm ? 'active-search' : 'try-options'}`}>
                 {!showForm && (
-                    <div className='flex-row'>
+                    <div className='flex-row mobile-hide'>
                         <button
                             className="btn-danger"
                             style={{ margin: 0, padding: '0.2rem' }}

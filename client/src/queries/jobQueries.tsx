@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 const GET_JOBS = gql`
-    query getJobs {
-        jobs {
+    query getJobs($userId: ID!) {
+        jobs(id: $userId) {
             id
             company
             logo

@@ -8,6 +8,7 @@ const ADD_JOB = gql`
         $jobDesc: String!
         $category: Category!
         $status: JobStatus!
+        $userId: ID!
     ) {
         addJob(
             company: $company
@@ -16,6 +17,7 @@ const ADD_JOB = gql`
             jobDesc: $jobDesc
             category: $category
             status: $status
+            userId: $userId
         ) {
             company
             logo
@@ -23,6 +25,11 @@ const ADD_JOB = gql`
             jobDesc
             category
             status
+            user {
+                id
+                username
+                email
+            }
         }
     }
 `;
@@ -65,7 +72,6 @@ const UPDATE_JOB = gql`
 const USER_LOGIN = gql`
     mutation UserLogin(
         $username: String!
-        # $email: String!
         $pw: String!
     ) {
         userLogin(data: { username: $username, pw: $pw }) {
@@ -125,4 +131,18 @@ const DELETE_USER = gql`
     }
 `
 
-export { ADD_JOB, DELETE_JOB, UPDATE_JOB, USER_LOGIN, ADD_USER, UPDATE_USER, DELETE_USER };
+const DELETE_ALL_JOBS = gql`
+    mutation DeleteAllJobs(
+        $id: ID!
+    ) {
+        deleteAllJobs(
+            id: $id
+        ) {
+            id
+            username
+            email
+        }
+    }
+`
+
+export { ADD_JOB, DELETE_JOB, UPDATE_JOB, USER_LOGIN, ADD_USER, UPDATE_USER, DELETE_USER, DELETE_ALL_JOBS };

@@ -27,7 +27,7 @@ export const Login = (props: Props) => {
             ...newUser, [e.target.name]: e.target.value
         })
     }
-
+    
     // SIGNIN
     const signIn = (e: any) => {
 
@@ -36,18 +36,16 @@ export const Login = (props: Props) => {
         userLogin(username, pw).then((res: any) => {
             const user = res.data.userLogin
 
-            console.log(res);
-            
+            if (user !== null) {
+                dispatch(currentUser(user))
 
-            // if (user !== null) {
-            //     dispatch(currentUser(user))
-            // } else {
-            //     alert('Wrong ID or Password');
-            // }
-        }).catch((err: any) => {
-            // alert('Wrong ID or Password');
-            console.log(err);
+                document.body.style.overflow = 'visible'
+            } else {
+                alert('Wrong ID or Password');
+            }
             
+        }).catch(() => {
+            alert('Wrong ID or Password');
         })
     }
     
@@ -65,7 +63,7 @@ export const Login = (props: Props) => {
                         <label>Password</label>
                         <input type="password" name='pw' value={pw} onChange={handleChange} />
                         <button>Login</button>
-                        <p>Need an account? <span className='link' style={{ textUnderlineOffset: '0.6rem' }} onClick={() => setShowReg(true)}>Sign Up</span></p>
+                        <p>Need an account? <span className='link mod' style={{ textUnderlineOffset: '0.6rem' }} onClick={() => setShowReg(true)}>Sign Up</span></p>
                     </form>
                     :
                     <Signup setShowReg={setShowReg} />}

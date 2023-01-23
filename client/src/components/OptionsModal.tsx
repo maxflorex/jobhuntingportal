@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { signoutCurrent } from '../redux/userSlice'
 import { DeleteConfirmation } from './DeleteConfirmation'
 
 interface Props {
@@ -8,6 +10,9 @@ interface Props {
 const OptionsModal = ({ setShowOptions }: Props) => {
     const [expand, setExpand] = useState(false)
     const [confirm, setConfirm] = useState(false)
+    const user: any = useSelector((state: any) => state.currentState.value)
+    const dispatch = useDispatch()
+    const [deleting, setDeleting] = useState('')
 
     const closeModal = (e: React.SyntheticEvent) => {
         e.preventDefault()
@@ -15,9 +20,16 @@ const OptionsModal = ({ setShowOptions }: Props) => {
         document.body.style.overflow = 'auto'
     };
 
-    const handleConfirm = (e: React.SyntheticEvent) => {
+    const handleConfirm = (e: React.SyntheticEvent, item: string) => {
         e.preventDefault()
         setConfirm(true)
+        setDeleting(item)
+    }
+
+    // LOGOUT
+    const logOut = (e: any) => {
+        e.preventDefault()
+        dispatch(signoutCurrent())
     }
 
     return (
@@ -25,9 +37,10 @@ const OptionsModal = ({ setShowOptions }: Props) => {
             <div className="flex-center">
                 <h1>Options</h1>
                 <button onClick={closeModal} className='dismiss btn-close mod'><span className="material-symbols-outlined">close</span></button>
+                <button onClick={logOut} className='logout'>Logout</button>
                 <div>
-                    <div className="flex-row" style={{margin: '2rem 0'}}>
-                        <h3 onClick={() => setExpand(!expand)} style={{ cursor: 'pointer' }}>Welcome, User
+                    <div className="flex-row" style={{ margin: '2rem 0' }}>
+                        <h3 onClick={() => setExpand(!expand)} style={{ cursor: 'pointer' }}>Welcome, {user.username}
                             <span className="material-symbols-outlined">
                                 {expand
                                     ?
@@ -40,11 +53,11 @@ const OptionsModal = ({ setShowOptions }: Props) => {
 
                     </div>
 
-                    {confirm && <DeleteConfirmation setConfirm={setConfirm} />}
+                    {confirm && <DeleteConfirmation setConfirm={setConfirm} deleting={deleting} closeModal={closeModal} />}
                     {expand && !confirm &&
                         <div className='flex-row' style={{ gap: '1rem' }}>
-                            <button onClick={handleConfirm}>Delete Profile</button>
-                            <button onClick={handleConfirm} className='mod'>Delete All Jobs</button>
+                            <button onClick={(e) => handleConfirm(e, 'user')}>Delete Profile</button>
+                            <button onClick={(e) => handleConfirm(e, 'jobs')} className='mod'>Delete All Jobs</button>
                         </div>
                     }
                 </div>

@@ -19,13 +19,17 @@ const JobList = () => {
     const [showDelete, setShowDelete] = useState(false)
     const [selectedJob, setSelectedJob] = useState([])
     const [selectedId, setSelectedId] = useState('')
+    const user: any = useSelector((state: any) => state.currentState.value)
     const suggestions = useSelector((state: any) => state.suggestions.value)
+    const { id } = user
 
     // LOADASH
     const chunkedSuggestions = _.chunk(suggestions, 4);
 
     // FECTH JOBS
-    const { loading, error, data } = useQuery(GET_JOBS);
+    const { loading, error, data } = useQuery(GET_JOBS,
+        { variables: { userId: id } }
+    );    
 
     // DATA LOADER LISTENER
     useEffect(() => {
@@ -65,11 +69,13 @@ const JobList = () => {
         setSelectedJob(job)
         setShowEdit(true)
     }
-
-
+   
+    
+    
     // RETURNS
     if (loading) return null;
     if (error) return <p>Something went wrong :(</p>;
+    if (data?.jobs.length === 0) return <p className='flex-row' style={{margin: '4rem 0'}}>The list is emty</p>
 
     return (<>
         <div className='job-list'>

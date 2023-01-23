@@ -2,15 +2,22 @@ import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { GET_JOBS } from '../queries/jobQueries';
 import _ from 'lodash';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { suggestions } from '../redux/suggestionSlice';
 
 type Props = {};
 
 const SearchJobs = (props: Props) => {
     const [text, setText] = useState('');
-    const { loading, error, data } = useQuery(GET_JOBS);
     const dispatch = useDispatch()
+
+    const id: string = useSelector((state: any) => state.currentState.value.id)
+
+
+
+    const { loading, error, data } = useQuery(GET_JOBS,
+        { variables: { userId: id } }
+    );
 
     useEffect(() => {
         let matches: any = [];

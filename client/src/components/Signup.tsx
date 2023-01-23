@@ -17,7 +17,7 @@ const Signup = ({ setShowReg }: Props) => {
             <label>Confirm Password</label>
             <input type="password" />
             <button>Submit</button>
-            <p>Already registered? <span className='link' style={{ textUnderlineOffset: '0.6rem' }} onClick={() => setShowReg(false)}>Login</span></p>
+            <p>Already registered? <span className='link mod' style={{ textUnderlineOffset: '0.6rem' }} onClick={() => setShowReg(false)}>Login</span></p>
         </form>
     )
 }
