@@ -512,6 +512,7 @@ tr {
 .flex-center {
     @include flex(column, center, center, 0);
     padding: 4rem;
+    height: 100vh;
 
     @include media {
         padding: 2rem 1rem;
@@ -526,6 +527,7 @@ tr {
 .link {
     text-decoration: underline;
     text-underline-offset: 0.8rem;
+    cursor: pointer;
     &:hover {
         color: map-get($color, 3);
     }

@@ -1,5 +1,7 @@
 const Job = require('../models/Job')
 const Interview = require('../models/Interview')
+const Users = require('../models/Users')
+const bcrypt = require('bcrypt')
 
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLEnumType, GraphQLInputObjectType } = require('graphql')
 
@@ -145,7 +147,7 @@ const RootQuery = new GraphQLObjectType({
 const mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        
+
 
         // * ADD USER
 
@@ -200,8 +202,8 @@ const mutation = new GraphQLObjectType({
             resolve(parent, args) {
                 // REMOVE LINKED EXPENSES
                 Job.find({ userId: args.id }).then((j) => {
-                    j.forEach((x) => {
-                        x.remove()
+                    j.forEach((project) => {
+                        project.remove()
                     })
                 })
 
@@ -211,7 +213,6 @@ const mutation = new GraphQLObjectType({
 
 
         // * ADD JOB
-
 
         addJob: {
             type: JobType,
@@ -254,7 +255,7 @@ const mutation = new GraphQLObjectType({
                     category: args.category,
                     status: args.status,
                     interviewId: args.interviewId,
-                    userId: args.interviewId
+                    userId: args.userId
                 });
                 return job.save()
             }
@@ -351,7 +352,19 @@ const mutation = new GraphQLObjectType({
                             'Development': { value: 'Development' },
                         }
                     }),
-                }
+                },
+                status: {
+                    type: new GraphQLEnumType({
+                        name: 'UpdateJobStatus',
+                        values: {
+                            'Interviewing': { value: 'Having an interview' },
+                            'Confirmation': { value: 'Email confirmation' },
+                            'Ignored': { value: 'Completely Ghosted' },
+                        }
+                    }),
+                    defaultValue: 'Completely Ghosted'
+                },
+
             },
             resolve(parent, args) {
                 return Job.findByIdAndUpdate(
@@ -362,6 +375,7 @@ const mutation = new GraphQLObjectType({
                         jobTitle: args.jobTitle,
                         jobDesc: args.jobDesc,
                         category: args.category,
+                        status: args.status,
                     }
                 },
                     // IF NOT NEW, IT WILL CREATE THE JOB OR FIELD

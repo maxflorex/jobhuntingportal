@@ -27,7 +27,7 @@ const JobSchema = new mongoose.Schema({
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users'
+        ref: 'Users',
     }
 }, { timestamps: true })
 
