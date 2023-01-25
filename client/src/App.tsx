@@ -30,7 +30,7 @@ const cache = new InMemoryCache({
 
 // APOLLO CLIENT
 const client: any = new ApolloClient({
-    uri: 'http://localhost:5000/graphql',
+    uri: 'https://jobhunt.onrender.com/graphql',
     cache,
 });
 

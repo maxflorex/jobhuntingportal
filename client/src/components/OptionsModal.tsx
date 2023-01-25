@@ -39,7 +39,7 @@ const OptionsModal = ({ setShowOptions }: Props) => {
                 <button onClick={closeModal} className='dismiss btn-close mod'><span className="material-symbols-outlined">close</span></button>
                 <button onClick={logOut} className='logout'>Logout</button>
                 <div>
-                    <div className="flex-row" style={{ margin: '2rem 0' }}>
+                    <div className="flex-row bg-light" style={{ margin: '2rem 0' }}>
                         <h3 onClick={() => setExpand(!expand)} style={{ cursor: 'pointer' }}>Welcome, {user.username}
                             <span className="material-symbols-outlined">
                                 {expand

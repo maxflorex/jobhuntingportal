@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { DELETE_USER } from '../mutations/JobMutation'
+import { DELETE_ALL_JOBS, DELETE_USER } from '../mutations/JobMutation'
 import { GET_JOBS } from '../queries/jobQueries'
 import { signoutCurrent } from '../redux/userSlice'
 
@@ -20,7 +20,7 @@ export const DeleteConfirmation = ({ setConfirm, deleting, closeModal }: Props) 
         variables: { id: id }
     })
 
-    const [deleteAllJobs]: any = useMutation(DELETE_USER, {
+    const [deleteAllJobs]: any = useMutation(DELETE_ALL_JOBS, {
         variables: { id: id },
         refetchQueries: [{ query: GET_JOBS, variables: { userId: id } }],
     })

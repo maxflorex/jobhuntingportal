@@ -57,6 +57,7 @@ $screen: (
 
 body {
     font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
     color: map-get($color, black);
     padding: 0 0 4rem 0;
     margin: 0;
@@ -193,8 +194,8 @@ form {
 }
 
 header {
-    background-color: map-get($color, 3 );
-    background-image: map-get($textures, 2 );
+    background-color: map-get($color, 3);
+    background-image: map-get($textures, 2);
     border-bottom: 2px solid black;
     padding: 1rem;
     display: none;
@@ -224,6 +225,9 @@ button {
     transition-property: all;
     transition-duration: 250ms;
     background-image: map-get($textures, 1);
+    border: 2px solid black;
+    font-weight: bolder;
+    color: black;
 
     &:hover {
         background-color: map-get($color, 2);
@@ -279,6 +283,7 @@ td {
     vertical-align: middle;
     border-radius: 0.4rem;
     height: 100%;
+    box-sizing: border-box;
 
     img {
         width: 2rem;
@@ -311,7 +316,7 @@ td {
         &:before {
             content: attr(data-label);
             position: absolute;
-            left: 3rem;
+            left: 2.6rem;
             font-weight: bold;
         }
     }
@@ -322,7 +327,8 @@ td {
 
     @include media {
         &:before {
-            left: 2rem;
+            left: 1.6rem;
+            font-weight: bold;
         }
     }
 }
@@ -331,6 +337,8 @@ tr {
     background-color: white;
     transition: all;
     transition-duration: 250ms;
+    position: relative;
+    box-sizing: border-box;
 
     &:hover {
         background-color: map-get($color, 1);
@@ -438,7 +446,7 @@ tr {
     position: absolute;
     top: 2rem;
     left: 2rem;
-    background-color:  map-get($color, 1 );
+    background-color: map-get($color, 1);
 }
 
 .btn-light {
@@ -497,6 +505,14 @@ tr {
             }
         }
     }
+
+    @include media(map-get($screen, md)) {
+        width: 100%;
+    }
+
+    @include media() {
+        width: 100%;
+    }
 }
 
 .active-search {
@@ -532,9 +548,11 @@ tr {
     left: 0;
     background-color: map-get($color, 1);
     background-image: map-get($textures, 2);
-    min-height: 100vh;
+    min-height: 0;
+    flex: 1;
     width: 100%;
     z-index: 400;
+    overflow-y: hidden
 }
 
 .flex-center {
@@ -561,7 +579,6 @@ tr {
     }
 
     @include media {
-
         &:not(.mod) {
             font-size: 2rem;
         }
@@ -583,4 +600,10 @@ tr {
     @include media(map-get($screen, md)) {
         display: none;
     }
+}
+
+.bg-light {
+    background-color: map-get($color, 1);
+    padding: 1rem 2rem;
+    border-radius: 0.4rem;
 }
